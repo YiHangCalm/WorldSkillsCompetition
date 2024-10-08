@@ -52,13 +52,25 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../Ltem_Sorting/main.cpp \
-		../Ltem_Sorting/mainwindow.cpp qrc_qmake_qmake_qm_files.cpp \
-		moc_mainwindow.cpp
-OBJECTS       = main.o \
+SOURCES       = ../Ltem_Sorting/camera.cpp \
+		../Ltem_Sorting/main.cpp \
+		../Ltem_Sorting/mainwindow.cpp \
+		../Ltem_Sorting/mode.cpp \
+		../Ltem_Sorting/modemanager.cpp \
+		../Ltem_Sorting/qrcode_mode.cpp qrc_qmake_qmake_qm_files.cpp \
+		moc_camera.cpp \
+		moc_mainwindow.cpp \
+		moc_qrcode_mode.cpp
+OBJECTS       = camera.o \
+		main.o \
 		mainwindow.o \
+		mode.o \
+		modemanager.o \
+		qrcode_mode.o \
 		qrc_qmake_qmake_qm_files.o \
-		moc_mainwindow.o
+		moc_camera.o \
+		moc_mainwindow.o \
+		moc_qrcode_mode.o
 DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -143,8 +155,16 @@ DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		../Ltem_Sorting/Ltem_Sorting.pro ../Ltem_Sorting/mainwindow.h ../Ltem_Sorting/main.cpp \
-		../Ltem_Sorting/mainwindow.cpp
+		../Ltem_Sorting/Ltem_Sorting.pro ../Ltem_Sorting/camera.h \
+		../Ltem_Sorting/mainwindow.h \
+		../Ltem_Sorting/mode.h \
+		../Ltem_Sorting/modemanager.h \
+		../Ltem_Sorting/qrcode_mode.h ../Ltem_Sorting/camera.cpp \
+		../Ltem_Sorting/main.cpp \
+		../Ltem_Sorting/mainwindow.cpp \
+		../Ltem_Sorting/mode.cpp \
+		../Ltem_Sorting/modemanager.cpp \
+		../Ltem_Sorting/qrcode_mode.cpp
 QMAKE_TARGET  = Ltem_Sorting
 DESTDIR       = 
 TARGET        = Ltem_Sorting
@@ -346,8 +366,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents ../Ltem_Sorting/Ltem_Sorting_zh_CN.ts $(DISTDIR)/
 	$(COPY_FILE) --parents qmake_qmake_qm_files.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Ltem_Sorting/mainwindow.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Ltem_Sorting/main.cpp ../Ltem_Sorting/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Ltem_Sorting/camera.h ../Ltem_Sorting/mainwindow.h ../Ltem_Sorting/mode.h ../Ltem_Sorting/modemanager.h ../Ltem_Sorting/qrcode_mode.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Ltem_Sorting/camera.cpp ../Ltem_Sorting/main.cpp ../Ltem_Sorting/mainwindow.cpp ../Ltem_Sorting/mode.cpp ../Ltem_Sorting/modemanager.cpp ../Ltem_Sorting/qrcode_mode.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../Ltem_Sorting/mainwindow.ui $(DISTDIR)/
 	$(COPY_FILE) --parents ../Ltem_Sorting/Ltem_Sorting_zh_CN.ts $(DISTDIR)/
 
@@ -393,13 +413,30 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	clang++ -pipe -g -std=gnu++1z -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp
+compiler_moc_header_make_all: moc_camera.cpp moc_mainwindow.cpp moc_qrcode_mode.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp
+	-$(DEL_FILE) moc_camera.cpp moc_mainwindow.cpp moc_qrcode_mode.cpp
+moc_camera.cpp: ../Ltem_Sorting/camera.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/camera.h -o moc_camera.cpp
+
 moc_mainwindow.cpp: ../Ltem_Sorting/mainwindow.h \
+		../Ltem_Sorting/mode.h \
+		../Ltem_Sorting/qrcode_mode.h \
+		../Ltem_Sorting/camera.h \
+		ui_mainwindow.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/mainwindow.h -o moc_mainwindow.cpp
+
+moc_qrcode_mode.cpp: ../Ltem_Sorting/qrcode_mode.h \
+		../Ltem_Sorting/mode.h \
+		../Ltem_Sorting/camera.h \
+		ui_mainwindow.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/qrcode_mode.h -o moc_qrcode_mode.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -422,18 +459,46 @@ compiler_clean: compiler_lrelease_clean compiler_rcc_clean compiler_moc_predefs_
 
 ####### Compile
 
-main.o: ../Ltem_Sorting/main.cpp ../Ltem_Sorting/mainwindow.h
+camera.o: ../Ltem_Sorting/camera.cpp ../Ltem_Sorting/camera.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o camera.o ../Ltem_Sorting/camera.cpp
+
+main.o: ../Ltem_Sorting/main.cpp ../Ltem_Sorting/mainwindow.h \
+		../Ltem_Sorting/mode.h \
+		../Ltem_Sorting/qrcode_mode.h \
+		../Ltem_Sorting/camera.h \
+		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Ltem_Sorting/main.cpp
 
 mainwindow.o: ../Ltem_Sorting/mainwindow.cpp ../Ltem_Sorting/mainwindow.h \
+		../Ltem_Sorting/mode.h \
+		../Ltem_Sorting/qrcode_mode.h \
+		../Ltem_Sorting/camera.h \
 		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Ltem_Sorting/mainwindow.cpp
+
+mode.o: ../Ltem_Sorting/mode.cpp ../Ltem_Sorting/mode.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mode.o ../Ltem_Sorting/mode.cpp
+
+modemanager.o: ../Ltem_Sorting/modemanager.cpp ../Ltem_Sorting/modemanager.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o modemanager.o ../Ltem_Sorting/modemanager.cpp
+
+qrcode_mode.o: ../Ltem_Sorting/qrcode_mode.cpp ../Ltem_Sorting/qrcode_mode.h \
+		../Ltem_Sorting/mode.h \
+		../Ltem_Sorting/camera.h \
+		ui_mainwindow.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrcode_mode.o ../Ltem_Sorting/qrcode_mode.cpp
 
 qrc_qmake_qmake_qm_files.o: qrc_qmake_qmake_qm_files.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qmake_qmake_qm_files.o qrc_qmake_qmake_qm_files.cpp
 
+moc_camera.o: moc_camera.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_camera.o moc_camera.cpp
+
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+
+moc_qrcode_mode.o: moc_qrcode_mode.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_qrcode_mode.o moc_qrcode_mode.cpp
 
 ####### Install
 

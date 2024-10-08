@@ -21,20 +21,4 @@ int main(int argc, char *argv[])
     w.show();
     return a.exec();
 }
-//#include <QApplication>
-//#include <QLabel>
-//#include <QTextCodec>
 
-//int main(int argc, char **argv)
-//{
-//    QApplication app(argc, argv);
-
-//    nt fontId = QFontDatabase::addApplicationFont("/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc");
-
-//    QTextCodec *coder = QTextCodec::codecForName("gbk");
-
-//    QLabel label(coder->toUnicode("����!"));
-//    label.show();
-
-//    return app.exec();
-//}
