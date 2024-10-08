@@ -27,3 +27,18 @@ CONFIG += embed_translations
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+# ����ͷ�ļ�·��
+INCLUDEPATH += /usr/local/include/opencv4
+
+# ���� OpenCV �Ŀ�·����Ҫ���ӵĿ�
+LIBS += -L/usr/local/lib \
+        -lopencv_core \
+        -lopencv_imgcodecs \
+        -lopencv_videoio \
+        -lopencv_highgui \
+        -lopencv_imgproc \
+        -lopencv_objdetect \
+        -lopencv_features2d \
+        -lopencv_dnn \
+        -lopencv_video
+

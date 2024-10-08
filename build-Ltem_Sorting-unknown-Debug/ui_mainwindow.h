@@ -11,8 +11,10 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 
@@ -22,6 +24,10 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
+    QPushButton *pushButton;
+    QLabel *camera;
+    QLabel *fps;
+    QLabel *erweima;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -32,9 +38,22 @@ public:
         MainWindow->resize(800, 600);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        pushButton = new QPushButton(centralwidget);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        pushButton->setGeometry(QRect(560, 290, 80, 24));
+        camera = new QLabel(centralwidget);
+        camera->setObjectName(QString::fromUtf8("camera"));
+        camera->setGeometry(QRect(0, 0, 401, 421));
+        fps = new QLabel(centralwidget);
+        fps->setObjectName(QString::fromUtf8("fps"));
+        fps->setGeometry(QRect(440, 20, 71, 31));
+        erweima = new QLabel(centralwidget);
+        erweima->setObjectName(QString::fromUtf8("erweima"));
+        erweima->setGeometry(QRect(430, 120, 151, 101));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
+        menubar->setGeometry(QRect(0, 0, 800, 21));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -48,6 +67,10 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
+        pushButton->setText(QCoreApplication::translate("MainWindow", "PushButton", nullptr));
+        camera->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
+        fps->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
+        erweima->setText(QCoreApplication::translate("MainWindow", "TextLabel", nullptr));
     } // retranslateUi
 
 };
