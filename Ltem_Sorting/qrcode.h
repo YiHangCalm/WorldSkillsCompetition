@@ -17,13 +17,21 @@ public:
     void exitMode() override;  // �˳���ά��ģʽ
     void show() override;  // ʵ�ֻ����� show ����
 
+private slots:
+
+
+    void on_pushButton_clicked();
+
 private:
     void processFrame(const cv::Mat &frame);
 
     Ui::qrcode ui;  // ʹ�� qrcode.ui ���ɵ� Ui �� ui;  // Ui �����ռ��е� QRCodeUI �࣬���ڹ��������ؼ�
-    ExternalCamera *camera;  // ��������
+   std::unique_ptr<ExternalCamera> camera; // ʹ������ָ��������������
     cv::QRCodeDetector qrDecoder;  // OpenCV �Ķ�ά��������
+   std::string lastDecodedText; // �������ϴν������ı�����
     std::vector<cv::Point> points;
+    bool signalConnected = false; // ����Ա��������ʼ��Ϊ false
+
 };
 
 #endif // QR_CODE_MODE_H

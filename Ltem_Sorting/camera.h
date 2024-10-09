@@ -15,6 +15,7 @@ class ExternalCamera : public QObject
 public:
     ExternalCamera(QWidget *parent = nullptr);
     void start();
+    void stop();
     QPixmap Mat2QImage(const cv::Mat &src);
     QLabel* getCameraLabel();  // ����������������ȡ QLabe
 signals:

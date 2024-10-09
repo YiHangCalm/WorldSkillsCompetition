@@ -1,6 +1,7 @@
 QT       += core gui
 FORMS += \
-    qrcode.ui
+    qrcode.ui \
+    scancolor.ui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
@@ -15,14 +16,16 @@ SOURCES += \
     mainwindow.cpp \
     mode.cpp \
     modemanager.cpp \
-    qrcode.cpp
+    qrcode.cpp \
+    scancolor.cpp
 
 HEADERS += \
     camera.h \
     mainwindow.h \
     mode.h \
     modemanager.h \
-    qrcode.h
+    qrcode.h \
+    scancolor.h
 
 FORMS += \
     mainwindow.ui

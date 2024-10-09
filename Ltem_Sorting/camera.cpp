@@ -1,15 +1,17 @@
 #include "camera.h"
 
-ExternalCamera::ExternalCamera(QWidget *parent) : QObject(parent), timer(new QTimer(this)), fpsTimer(new QElapsedTimer), frameCount(0), fps(0.0)
+ExternalCamera::ExternalCamera(QWidget *parent)
+    : QObject(parent), timer(new QTimer(this)), fpsTimer(new QElapsedTimer), frameCount(0), fps(0.0)
 {
-    // ����һ�� QLabel��λ��Ϊ (0, 0)����СΪ 640x480
+    // ���� QLabel����С������ͷ�ķֱ���һ��
     cameraLabel = new QLabel(parent);
-    cameraLabel->setGeometry(0, 0, 320, 240);
+    cameraLabel->setGeometry(20, 20, 320, 240);  // ���� QLabel �Ĵ�СΪ 320x240��������ͷ�ķֱ���һ��
     cameraLabel->show();
 
-    // ���Ӷ�ʱ���ĳ�ʱ�źŵ� display �ۺ���
+    // ���Ӷ�ʱ����ʱ�źŵ� display �ۺ���
     connect(timer, &QTimer::timeout, this, &ExternalCamera::display);
 }
+
 void ExternalCamera::start()
 {
     videocapture.open(0);
@@ -17,24 +19,38 @@ void ExternalCamera::start()
         videocapture.set(cv::CAP_PROP_FRAME_WIDTH, 320);
         videocapture.set(cv::CAP_PROP_FRAME_HEIGHT, 240);
         fpsTimer->start();
-        timer->start(33);  // Capture approximately 30 FPS
+        timer->start(33);  // ��Լ 30 FPS
     }
+}
+
+void ExternalCamera::stop()
+{
+    if (timer->isActive()) {
+        timer->stop();  // ֹͣ��ʱ��
+    }
+
+    if (videocapture.isOpened()) {
+        videocapture.release();  // �ͷ�����ͷ��Դ
+    }
+
+    cameraLabel->clear();  // ���� QLabel ������
+    cameraLabel->hide();   // ���� QLabel
 }
 
 void ExternalCamera::display()
 {
-    // ��̬������ָʾ֡�Ƿ��ڴ�����
+    // ��̬����������ָʾ֡�Ƿ����ڴ�����
     static bool isProcessing = false;
 
-    // ������ǰ֡���ڴ����У�ֱ�ӷ���
+    // ������ǰ��֡���ڴ�����ֱ�ӷ���
     if (isProcessing) {
         return;
     }
 
-    // ��־λ��Ϊ true����ʾ��ʼ������֡
+    // ���ñ�־λΪ true����ʾ��ʼ����֡
     isProcessing = true;
 
-    // ��������ͷ�Ƿ��Ѵ���
+    // ��������ͷ�Ƿ��Ѿ�����
     if (!videocapture.isOpened()) {
         isProcessing = false;
         return;
@@ -43,7 +59,7 @@ void ExternalCamera::display()
     // ����֡����
     frameCount++;
 
-    // ���� FPS ÿ������һ��
+    // ÿ���Ӹ���һ�� FPS��֡�ʣ�
     if (fpsTimer->elapsed() > 1000) {
         fps = frameCount / (fpsTimer->elapsed() / 1000.0);
         frameCount = 0;
@@ -59,16 +75,16 @@ void ExternalCamera::display()
 
     // ��֡�ϻ���֡����Ϣ
     std::string fpsText = "FPS: " + std::to_string(static_cast<int>(fps));
-    cv::putText(frame, fpsText, cv::Point(10, 30), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 255, 0), 1);
+    cv::putText(frame, fpsText, cv::Point(10, 20), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 255, 0), 1);
 
-    // ��֡ת��Ϊ QPixmap ��ʾ�� QLabel ��
+    // ��֡ת��Ϊ QPixmap������ QLabel ����ʾ
     QPixmap qpixmap = Mat2QImage(frame);
     cameraLabel->setPixmap(qpixmap);
 
-    // �����ź�֪ͨ֡��׼����
+    // �����źţ�֪ͨ֡��׼����
     emit frameReady(frame);
 
-    // ��־λ��Ϊ false����ʾ��ǰ֡��������
+    // ���ñ�־λΪ false����ʾ��ǰ֡��������
     isProcessing = false;
 }
 

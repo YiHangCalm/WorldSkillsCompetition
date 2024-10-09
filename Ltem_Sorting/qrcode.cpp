@@ -1,18 +1,20 @@
 #include "qrcode.h"
 #include <QDebug>
+
 QRCode::QRCode(QWidget *parent)
-    : QMainWindow(parent), camera(nullptr)
+    : QMainWindow(parent), camera(nullptr), lastDecodedText("")
 {
-    ui.setupUi(this);  // ��ʼ�� UI���� qrcode.ui �еĿؼ����ӵ���ǰ QMainWindow ʵ����
+    ui.setupUi(this);
+    this->showFullScreen();
 }
 
 void QRCode::enterMode(QWidget *parentWidget)
 {
-    // ��ʼ������
     if (!camera) {
-        camera = new ExternalCamera(this);
+        camera = std::make_unique<ExternalCamera>(this);
         camera->start();
     }
+
     this->execute();
 }
 
@@ -20,54 +22,67 @@ void QRCode::execute()
 {
     if (!camera) return;
 
-    // ȷ��ֻ����һ������
-    if (!QObject::connect(camera, &ExternalCamera::frameReady, this, [this](const cv::Mat &frame) {
-        processFrame(frame);
-    })) {
-        qDebug() << "Failed to connect camera signal to processFrame";
+    if (!signalConnected) {
+        if (QObject::connect(camera.get(), &ExternalCamera::frameReady, this, [this](const cv::Mat &frame) {
+            processFrame(frame);
+        })) {
+            signalConnected = true;
+        } else {
+            qDebug() << "Failed to connect camera signal to processFrame";
+        }
     }
 }
 
 void QRCode::exitMode()
 {
     if (camera) {
-        delete camera;
-        camera = nullptr;
+        camera->stop(); // ֹͣ����ͷ
+        camera.reset(); // �ͷ�������Դ
     }
-
 
     if (parentWidget()) {
         parentWidget()->show();
     }
+
     this->hide();
 }
 
 void QRCode::show()
 {
-    QMainWindow::show();  // ���ø��� QMainWindow �� show ����
+    QMainWindow::show();
 }
 
 void QRCode::processFrame(const cv::Mat &frame)
 {
-    // ��¡��ǰ֡���ڻ��ƶ�ά���߿�
     cv::Mat frameWithLines = frame.clone();
 
-    // ���Ⲣ������ά��
     std::string decodedText = this->qrDecoder.detectAndDecode(frameWithLines, this->points);
 
+    // �����½������ı�Ϊ�ջ��ߺ��ϴν�����һ��������������
+//        if (decodedText.empty() || decodedText == lastDecodedText) {
+//            return;
+//        }
+
+//        // �����ϴν������ı�
+//        lastDecodedText = decodedText;
+
+
+
     if (!decodedText.empty() && this->points.size() == 4) {
-        // �ڶ�ά����Ե����
         for (int i = 0; i < 4; i++) {
             cv::line(frameWithLines, this->points[i], this->points[(i + 1) % 4], cv::Scalar(0, 0, 255), 3);
         }
 
-        // ��ʾ���������ı���Ϣ�� QTextEdit �ؼ�
         if (ui.informationEdit) {
             ui.informationEdit->append(QString::fromStdString(decodedText));
         }
     }
 
-    // �����ƺ���֡��ʾ�� QLabel ��
     QPixmap qpixmap = camera->Mat2QImage(frameWithLines);
     camera->getCameraLabel()->setPixmap(qpixmap);
+}
+
+void QRCode::on_pushButton_clicked()
+{
+    exitMode();
 }
