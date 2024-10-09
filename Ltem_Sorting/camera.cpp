@@ -23,8 +23,20 @@ void ExternalCamera::start()
 
 void ExternalCamera::display()
 {
+    // ��̬������ָʾ֡�Ƿ��ڴ�����
+    static bool isProcessing = false;
+
+    // ������ǰ֡���ڴ����У�ֱ�ӷ���
+    if (isProcessing) {
+        return;
+    }
+
+    // ��־λ��Ϊ true����ʾ��ʼ������֡
+    isProcessing = true;
+
     // ��������ͷ�Ƿ��Ѵ���
     if (!videocapture.isOpened()) {
+        isProcessing = false;
         return;
     }
 
@@ -41,12 +53,13 @@ void ExternalCamera::display()
     // ������ͷ��ȡһ֡
     videocapture.read(frame);
     if (frame.empty()) {
+        isProcessing = false;
         return;
     }
 
-    // ��֡����Ϣ���Ƶ�֡�����Ͻ�
+    // ��֡�ϻ���֡����Ϣ
     std::string fpsText = "FPS: " + std::to_string(static_cast<int>(fps));
-    cv::putText(frame, fpsText, cv::Point(10, 30), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 255, 0), 0.5);
+    cv::putText(frame, fpsText, cv::Point(10, 30), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 255, 0), 1);
 
     // ��֡ת��Ϊ QPixmap ��ʾ�� QLabel ��
     QPixmap qpixmap = Mat2QImage(frame);
@@ -54,7 +67,11 @@ void ExternalCamera::display()
 
     // �����ź�֪ͨ֡��׼����
     emit frameReady(frame);
+
+    // ��־λ��Ϊ false����ʾ��ǰ֡��������
+    isProcessing = false;
 }
+
 QPixmap ExternalCamera::Mat2QImage(const cv::Mat &src)
 {
     QImage img;

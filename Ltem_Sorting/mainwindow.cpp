@@ -30,10 +30,10 @@ void MainWindow::on_modeButton_clicked()
         currentMode->exitMode();
         delete currentMode;
     }
-    // ��ť���º������Լ�
-      ui-> modeButton->hide();
-    // ������ά��ģʽ������
-    currentMode = new QRCode_Mode(ui);
-    currentMode->enterMode(this);
-    currentMode->execute();
+
+       this->hide();
+    // ������������ά��ģʽ
+       currentMode = new QRCode(); // ���ٽ���������Ϊ������
+       currentMode->enterMode(this);
+       currentMode->show(); // ��ʾ��ά�봰��
 }

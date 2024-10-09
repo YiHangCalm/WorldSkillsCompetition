@@ -10,6 +10,7 @@ public:
     virtual void enterMode(QWidget *parentWidget) = 0;  // �����ຯ������Ϊ�麯��
     virtual void execute() = 0;
     virtual void exitMode() = 0;
+    virtual void show() = 0;  // ��Ҫ����ʵ��
     //virtual void prepareUI(QWidget *parentWidget) = 0;
     virtual ~Mode() {}
 };

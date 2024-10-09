@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include "mode.h"
-#include "qrcode_mode.h"
+#include "qrcode.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

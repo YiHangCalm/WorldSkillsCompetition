@@ -1,5 +1,6 @@
 QT       += core gui
-
+FORMS += \
+    qrcode.ui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
@@ -14,14 +15,14 @@ SOURCES += \
     mainwindow.cpp \
     mode.cpp \
     modemanager.cpp \
-    qrcode_mode.cpp
+    qrcode.cpp
 
 HEADERS += \
     camera.h \
     mainwindow.h \
     mode.h \
     modemanager.h \
-    qrcode_mode.h
+    qrcode.h
 
 FORMS += \
     mainwindow.ui
