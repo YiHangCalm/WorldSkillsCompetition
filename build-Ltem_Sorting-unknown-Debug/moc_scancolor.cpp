@@ -1,5 +1,5 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'qrcode.h'
+** Meta object code from reading C++ file 'scancolor.h'
 **
 ** Created by: The Qt Meta Object Compiler version 67 (Qt 5.15.8)
 **
@@ -7,11 +7,11 @@
 *****************************************************************************/
 
 #include <memory>
-#include "../Ltem_Sorting/qrcode.h"
+#include "../Ltem_Sorting/scancolor.h"
 #include <QtCore/qbytearray.h>
 #include <QtCore/qmetatype.h>
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'qrcode.h' doesn't include <QObject>."
+#error "The header file 'scancolor.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
 #error "This file was generated using the moc from 5.15.8. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -21,27 +21,27 @@
 QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
-struct qt_meta_stringdata_QRCode_t {
+struct qt_meta_stringdata_ScanColor_t {
     QByteArrayData data[3];
-    char stringdata0[30];
+    char stringdata0[33];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_QRCode_t, stringdata0) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_ScanColor_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
-static const qt_meta_stringdata_QRCode_t qt_meta_stringdata_QRCode = {
+static const qt_meta_stringdata_ScanColor_t qt_meta_stringdata_ScanColor = {
     {
-QT_MOC_LITERAL(0, 0, 6), // "QRCode"
-QT_MOC_LITERAL(1, 7, 21), // "on_pushButton_clicked"
-QT_MOC_LITERAL(2, 29, 0) // ""
+QT_MOC_LITERAL(0, 0, 9), // "ScanColor"
+QT_MOC_LITERAL(1, 10, 21), // "on_exitButton_clicked"
+QT_MOC_LITERAL(2, 32, 0) // ""
 
     },
-    "QRCode\0on_pushButton_clicked\0"
+    "ScanColor\0on_exitButton_clicked\0"
 };
 #undef QT_MOC_LITERAL
 
-static const uint qt_meta_data_QRCode[] = {
+static const uint qt_meta_data_ScanColor[] = {
 
  // content:
        8,       // revision
@@ -63,45 +63,45 @@ static const uint qt_meta_data_QRCode[] = {
        0        // eod
 };
 
-void QRCode::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void ScanColor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
-        auto *_t = static_cast<QRCode *>(_o);
+        auto *_t = static_cast<ScanColor *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->on_pushButton_clicked(); break;
+        case 0: _t->on_exitButton_clicked(); break;
         default: ;
         }
     }
     (void)_a;
 }
 
-QT_INIT_METAOBJECT const QMetaObject QRCode::staticMetaObject = { {
+QT_INIT_METAOBJECT const QMetaObject ScanColor::staticMetaObject = { {
     QMetaObject::SuperData::link<QMainWindow::staticMetaObject>(),
-    qt_meta_stringdata_QRCode.data,
-    qt_meta_data_QRCode,
+    qt_meta_stringdata_ScanColor.data,
+    qt_meta_data_ScanColor,
     qt_static_metacall,
     nullptr,
     nullptr
 } };
 
 
-const QMetaObject *QRCode::metaObject() const
+const QMetaObject *ScanColor::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
 }
 
-void *QRCode::qt_metacast(const char *_clname)
+void *ScanColor::qt_metacast(const char *_clname)
 {
     if (!_clname) return nullptr;
-    if (!strcmp(_clname, qt_meta_stringdata_QRCode.stringdata0))
+    if (!strcmp(_clname, qt_meta_stringdata_ScanColor.stringdata0))
         return static_cast<void*>(this);
     if (!strcmp(_clname, "Mode"))
         return static_cast< Mode*>(this);
     return QMainWindow::qt_metacast(_clname);
 }
 
-int QRCode::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int ScanColor::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QMainWindow::qt_metacall(_c, _id, _a);
     if (_id < 0)

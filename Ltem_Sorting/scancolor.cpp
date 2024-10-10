@@ -16,8 +16,7 @@ void ScanColor::enterMode(QWidget *parentWidget)
         camera->start();
 
         // ���� QLabel �ĳߴ���ƥ������ͷ�ķֱ���
-        camera->getCameraLabel()->setGeometry(0, 0, 640, 480);
-        camera->getCameraLabel()->show();
+
     }
 
     this->execute();
@@ -61,41 +60,50 @@ void ScanColor::processFrame(const cv::Mat &frame)
     cv::Mat frameHSV;
     cv::cvtColor(frame, frameHSV, cv::COLOR_BGR2HSV);  // ��ͼ��ת��Ϊ HSV ��ɫ�ռ�
 
-    // ������ɫ�ķ�Χ�����ڼ�����ɫ
-    cv::Scalar lowerRed(0, 100, 100);
-    cv::Scalar upperRed(10, 200, 200);
+    // ������ɫ��Χ�����ڼ�����ɫ����ɫ����ɫ
+    std::vector<std::pair<cv::Scalar, cv::Scalar>> colorRanges = {
+        {cv::Scalar(0, 100, 100), cv::Scalar(10, 255, 255)},     // ��ɫ
+        {cv::Scalar(100, 150, 0), cv::Scalar(140, 255, 255)},    // ��ɫ
+        {cv::Scalar(20, 100, 100), cv::Scalar(30, 255, 255)}     // ��ɫ
+    };
 
-    // ������ɫ����
-    cv::Mat mask;
-    cv::inRange(frameHSV, lowerRed, upperRed, mask);
+    std::vector<std::string> colorNames = {"Red", "Blue", "Yellow"};
 
-    // ���Ͳ���
-    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));
-    cv::dilate(mask, mask, kernel, cv::Point(-1, -1), 1);
-
-    // Ѱ������
-    std::vector<std::vector<cv::Point>> contours;
-    cv::findContours(mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
-
-    bool colorDetected = false;
     cv::Mat result = frame.clone();
+    bool colorDetected = false;
+    std::string detectedColor;
 
-    for (const auto &contour : contours) {
-        double area = cv::contourArea(contour);
-        if (area < 200) {
-            continue;  // ����С�� 200 ���ص�����
+    // ѭ������ÿ����ɫ��Χ
+    for (size_t i = 0; i < colorRanges.size(); ++i) {
+        cv::Mat mask;
+        cv::inRange(frameHSV, colorRanges[i].first, colorRanges[i].second, mask);  // ������ɫ����
+
+        // ���Ͳ�������ǿɫ������
+        cv::Mat dilatedMask;
+        cv::dilate(mask, dilatedMask, cv::Mat(), cv::Point(-1, -1), 2);
+
+        // Ѱ������
+        std::vector<std::vector<cv::Point>> contours;
+        cv::findContours(dilatedMask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+
+        for (const auto &contour : contours) {
+            double area = cv::contourArea(contour);
+            if (area < 1000) {
+                continue;  // ����С�� 200 ���ص�����
+            }
+
+            // ���ƾ��ο�
+            cv::Rect boundingRect = cv::boundingRect(contour);
+            cv::rectangle(result, boundingRect, cv::Scalar(0, 255, 0), 2);
+
+            colorDetected = true;
+            detectedColor = colorNames[i];
         }
-
-        // ���ƾ��ο�
-        cv::Rect boundingRect = cv::boundingRect(contour);
-        cv::rectangle(result, boundingRect, cv::Scalar(0, 0, 255), 2);
-
-        colorDetected = true;
     }
 
     // ��ʾ���⵽����ɫ��Ϣ
     if (colorDetected && ui.informationEdit) {
-        ui.informationEdit->append("Color detected: Red");
+        ui.informationEdit->append(QString("Color detected: %1").arg(QString::fromStdString(detectedColor)));
     }
 
     QPixmap qpixmap = camera->Mat2QImage(result);

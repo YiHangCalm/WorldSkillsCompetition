@@ -4,6 +4,7 @@
 QRCode::QRCode(QWidget *parent)
     : QMainWindow(parent), camera(nullptr), lastDecodedText("")
 {
+
     ui.setupUi(this);
     this->showFullScreen();
 }
@@ -37,7 +38,7 @@ void QRCode::exitMode()
 {
     if (camera) {
         camera->stop(); // ֹͣ����ͷ
-        camera.reset(); // �ͷ�������Դ
+        camera.reset(); // �ͷ�����ͷ��Դ
     }
 
     if (parentWidget()) {
@@ -58,23 +59,19 @@ void QRCode::processFrame(const cv::Mat &frame)
 
     std::string decodedText = this->qrDecoder.detectAndDecode(frameWithLines, this->points);
 
-    // �����½������ı�Ϊ�ջ��ߺ��ϴν�����һ��������������
-//        if (decodedText.empty() || decodedText == lastDecodedText) {
-//            return;
-//        }
+    // �����ɹ������ݲ�ͬ���ϴν���������
+    if (!decodedText.empty() && decodedText != lastDecodedText) {
+        lastDecodedText = decodedText;
 
-//        // �����ϴν������ı�
-//        lastDecodedText = decodedText;
+        // �ָ��������ı�����
+        QStringList parts = QString::fromStdString(decodedText).split("-");
+        if (parts.size() == 3) {
+            int row = ui.tableWidget->rowCount();
+            ui.tableWidget->insertRow(row);
 
-
-
-    if (!decodedText.empty() && this->points.size() == 4) {
-        for (int i = 0; i < 4; i++) {
-            cv::line(frameWithLines, this->points[i], this->points[(i + 1) % 4], cv::Scalar(0, 0, 255), 3);
-        }
-
-        if (ui.informationEdit) {
-            ui.informationEdit->append(QString::fromStdString(decodedText));
+            ui.tableWidget->setItem(row, 0, new QTableWidgetItem(parts[0]));
+            ui.tableWidget->setItem(row, 1, new QTableWidgetItem(parts[1]));
+            ui.tableWidget->setItem(row, 2, new QTableWidgetItem(parts[2]));
         }
     }
 

@@ -4,18 +4,18 @@
 #include <QWidget>
 #include "mode.h"
 #include "camera.h"
-#include "ui_scancolor.h"  // ���� UI �ļ� scancolor.ui ��ͷ�ļ�
+#include "ui_scancolor.h"
 
-class ScanColor : public QMainWindow , public Mode  // ��Ϊֻ�̳� QMainWindow
+class ScanColor : public QMainWindow , public Mode
 {
     Q_OBJECT
 
 public:
     explicit ScanColor(QWidget *parent = nullptr);
-    void enterMode(QWidget *parentWidget);  // ������ɫʶ��ģʽ
-    void execute();  // ����ÿһ֡����
-    void exitMode();  // �˳���ɫʶ��ģʽ
-    void show();  // ʵ����ʾ����
+    void enterMode(QWidget *parentWidget);
+    void execute();
+    void exitMode();
+    void show();
 
 private slots:
 
@@ -23,9 +23,9 @@ private slots:
     void on_exitButton_clicked();
 
 private:
-    void processFrame(const cv::Mat &frame);  // ��������ͷ������֡
+    void processFrame(const cv::Mat &frame);
 
-    Ui::ScanColor ui;  // UI ��������
+    Ui::ScanColor ui;
     std::unique_ptr<ExternalCamera> camera;  // ����ͷ����
     bool signalConnected = false;  // �Ƿ��������ź�
 };

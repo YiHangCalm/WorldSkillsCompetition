@@ -7,67 +7,93 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>800</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeType">
-       <enum>QSizePolicy::Ignored</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>1003</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="0" column="1" colspan="2">
-     <widget class="QTextEdit" name="informationEdit">
-      <property name="font">
-       <font>
-        <family>文泉驿微米黑</family>
-        <pointsize>28</pointsize>
-       </font>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>911</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="1" column="2">
-     <widget class="QPushButton" name="pushButton">
-      <property name="font">
-       <font>
-        <family>文泉驿点阵正黑</family>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>返回</string>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <widget class="QTextEdit" name="informationEdit">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>240</y>
+      <width>321</width>
+      <height>291</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>文泉驿微米黑</family>
+      <pointsize>28</pointsize>
+     </font>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>830</x>
+      <y>440</y>
+      <width>191</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>文泉驿点阵正黑</family>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>返回</string>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>0</y>
+      <width>711</width>
+      <height>441</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Ignored">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>20</pointsize>
+     </font>
+    </property>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>110</number>
+    </attribute>
+    <attribute name="verticalHeaderMinimumSectionSize">
+     <number>70</number>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>70</number>
+    </attribute>
+    <column>
+     <property name="text">
+      <string>出发地</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>到达地</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>包裹类型</string>
+     </property>
+    </column>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

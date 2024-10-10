@@ -54,3 +54,6 @@ LIBS += -L/usr/local/lib \
         -lopencv_dnn \
         -lopencv_video
 
+RESOURCES += \
+    Resource.qrc
+
