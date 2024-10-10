@@ -2,4 +2,10 @@
     <qresource prefix="/new/prefix1">
         <file>Rese/back.png</file>
     </qresource>
+    <qresource prefix="/new/btn">
+        <file>Rese/qrbtn.png</file>
+        <file>Rese/exbtn.png</file>
+        <file>Rese/jiancebtn.png</file>
+        <file>Rese/clrbtn.png</file>
+    </qresource>
 </RCC>

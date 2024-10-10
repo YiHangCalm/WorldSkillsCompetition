@@ -1,24 +1,38 @@
-#include "mainwindow.h"
-
 #include <QApplication>
-#include <QLocale>
-#include <QTranslator>
+#include "mainwindow.h"
+#include <QFile>
+#include <QTextStream>
+#include <QDateTime>
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
-    QTranslator translator;
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-    for (const QString &locale : uiLanguages) {
-        const QString baseName = "Ltem_Sorting_" + QLocale(locale).name();
-        if (translator.load(":/i18n/" + baseName)) {
-            a.installTranslator(&translator);
-            break;
-        }
-    }
     MainWindow w;
-    w.show();
-    return a.exec();
-}
 
+    // ȫ���쳣��������
+    try {
+        w.show();
+        return a.exec();
+    } catch (const std::exception &e) {
+        QFile logFile("application.log");
+        if (logFile.open(QIODevice::Append | QIODevice::Text)) {
+            QTextStream out(&logFile);
+            out << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss")
+                << " - Unhandled exception: " << e.what() << "\n";
+        }
+        logFile.close();
+        std::cerr << "Unhandled exception: " << e.what() << std::endl;
+        return -1;
+    } catch (...) {
+        QFile logFile("application.log");
+        if (logFile.open(QIODevice::Append | QIODevice::Text)) {
+            QTextStream out(&logFile);
+            out << QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss")
+                << " - Unknown unhandled exception occurred\n";
+        }
+        logFile.close();
+        std::cerr << "Unknown unhandled exception occurred." << std::endl;
+        return -1;
+    }
+}

@@ -21,52 +21,76 @@
   </property>
   <property name="styleSheet">
    <string notr="true">#MainWindow {
+
     background-image: url(:/new/prefix1/Rese/back.png);
     background-position: center;
     background-repeat: no-repeat; 
   
 }
+
 #centralwidget {
     background: transparent;
+   border: none;
+        background: transparent;
+        padding: 0;
+       margin: 0; 
 }
 
+QWidget#widget {
+        border: none;
+        background: transparent;
+        padding: 0;
+       margin: 0; 
+    }
 QPushButton#modeButton {
-    background-color: rgb(34, 255, 211);
+	
+  	 border: none; 
+    background: none;  
+	border-image: url(:/new/btn/Rese/qrbtn.png);
     color: black;
     width: 150px;  
-    height: 50px; 
-	font-size: 16px; 
+    height: 80px; 
+	
 }
 
 QPushButton#ColourButton {
-    background-color: rgb(34, 255, 211);
-    color: black;
+
+    
+	border-image: url(:/new/btn/Rese/clrbtn.png);
+   
     width: 150px;  
     height: 50px;   
 	font-size: 16px;
+	border: none;
 }
 QPushButton#InspectButton{
-    background-color: rgb(34, 255, 211);
-    color: black;
+    
+	border-image: url(:/new/btn/Rese/jiancebtn.png);
+    
     width: 150px;   
     height: 50px;
 	font-size: 16px;   
+	border: none;
 }
 QPushButton#exitButton {
-    background-color: rgb(34, 255, 211);
-    color: black;
+    border-image: url(:/new/btn/Rese/exbtn.png);
+    
     width: 150px;   
     height: 50px;   
 	font-size: 16px;
-}</string>
+	border: none;
+}
+QPushButton:focus {
+        outline: none;
+    }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>770</x>
+      <x>750</x>
       <y>60</y>
-      <width>176</width>
+      <width>221</width>
       <height>452</height>
      </rect>
     </property>
@@ -87,27 +111,13 @@ QPushButton#exitButton {
      <item>
       <widget class="QPushButton" name="modeButton">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>200</width>
-         <height>600</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>-1</pointsize>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
        <property name="text">
-        <string>QRCode_Mode</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -126,8 +136,14 @@ QPushButton#exitButton {
      </item>
      <item>
       <widget class="QPushButton" name="ColourButton">
+       <property name="minimumSize">
+        <size>
+         <width>203</width>
+         <height>80</height>
+        </size>
+       </property>
        <property name="text">
-        <string>Colour_Mode</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -146,8 +162,14 @@ QPushButton#exitButton {
      </item>
      <item>
       <widget class="QPushButton" name="InspectButton">
+       <property name="minimumSize">
+        <size>
+         <width>203</width>
+         <height>80</height>
+        </size>
+       </property>
        <property name="text">
-        <string>PushButton</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -166,6 +188,12 @@ QPushButton#exitButton {
      </item>
      <item>
       <widget class="QPushButton" name="exitButton">
+       <property name="minimumSize">
+        <size>
+         <width>203</width>
+         <height>80</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <family>文泉驿点阵正黑</family>
@@ -173,7 +201,7 @@ QPushButton#exitButton {
         </font>
        </property>
        <property name="text">
-        <string>EXIT</string>
+        <string/>
        </property>
       </widget>
      </item>

@@ -4,34 +4,35 @@
 #include <QWidget>
 #include "mode.h"
 #include "camera.h"
-#include "ui_qrcode.h"  // ������ qrcode.ui �Զ����ɵ�ͷ�ļ�
+#include "ui_qrcode.h"
+#include "mytimer.h"
+#include <QFile>
+#include <QTextStream>
 
-class QRCode : public QMainWindow, public Mode  // �̳��� QWidget �� Mode ����
+class QRCode : public QMainWindow, public Mode
 {
     Q_OBJECT
 
 public:
     explicit QRCode(QWidget *parent = nullptr);
-    void enterMode(QWidget *parentWidget) override;  // ������ά��ģʽ
-    void execute() override;  // ִ��ÿһ֡�Ĵ����߼�
-    void exitMode() override;  // �˳���ά��ģʽ
-    void show() override;  // ʵ�ֻ����� show ����
+    void enterMode(QWidget *parentWidget) override;
+    void execute() override;
+    void exitMode() override;
+    void show() override;
 
 private slots:
-
-
     void on_pushButton_clicked();
 
 private:
     void processFrame(const cv::Mat &frame);
-
-    Ui::qrcode ui;  // ʹ�� qrcode.ui ���ɵ� Ui �� ui;  // Ui �����ռ��е� QRCodeUI �࣬���ڹ��������ؼ�
-   std::unique_ptr<ExternalCamera> camera; // ʹ������ָ��������������
-    cv::QRCodeDetector qrDecoder;  // OpenCV �Ķ�ά��������
-   std::string lastDecodedText; // �������ϴν������ı�����
+    mytimer mytimer;
+    Ui::qrcode ui;
+    std::unique_ptr<ExternalCamera> camera;
+    cv::QRCodeDetector qrDecoder;
+    std::string lastDecodedText;
     std::vector<cv::Point> points;
-    bool signalConnected = false; // ����Ա��������ʼ��Ϊ false
-
+    bool signalConnected = false;
+    int currentIndex = 1;
 };
 
 #endif // QR_CODE_MODE_H

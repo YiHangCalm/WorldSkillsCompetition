@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QEventLoop>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -8,10 +9,14 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->showFullScreen();
-    // ����ģʽ��ť
-    connect(ui->exitButton, &QPushButton::clicked, this, &MainWindow::on_exitButton_clicked);
-     connect(ui->ColourButton, &QPushButton::clicked, this, &MainWindow::on_ColourButton_clicked);
-    connect(ui->modeButton,&QPushButton::clicked, this, &MainWindow::on_modeButton_clicked);
+
+
+    connect(ui->modeButton, &QPushButton::pressed, this, &MainWindow::on_modeButton_Pressed);
+    connect(ui->modeButton, &QPushButton::released, this, &MainWindow::on_modeButton_Released);
+    connect(ui->ColourButton, &QPushButton::pressed, this, &MainWindow::on_ColourButton_Pressed);
+    connect(ui->ColourButton, &QPushButton::released, this, &MainWindow::on_ColourButton_Released);
+    connect(ui->exitButton, &QPushButton::pressed, this, &MainWindow::on_exitButton_Pressed);
+    connect(ui->exitButton, &QPushButton::released, this, &MainWindow::on_exitButton_Released);
 }
 
 MainWindow::~MainWindow()
@@ -27,46 +32,74 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape) {
         if (isFullScreen()) {
-            showNormal();  // ������ȫ��״̬���л�Ϊ����״̬
+            showNormal();  // �˳�ȫ��״̬
         } else {
-            showFullScreen();  // ��������ȫ��״̬���л�Ϊȫ��
+            showFullScreen();  // ����ȫ��״̬
         }
     }
 }
-void MainWindow::on_modeButton_clicked()
+
+void MainWindow::on_modeButton_Pressed()
 {
-    if (currentMode) {
-            currentMode->exitMode();
-            delete currentMode;  // ɾ������ģʽʵ��
-            currentMode = nullptr;
-        }
-       this->hide();
-    // ������������ά��ģʽ
-    currentMode = new QRCode(this); // ���� `this` ��Ϊ�����󣬱��ڹ�����������
-    currentMode->enterMode(this);
-    currentMode->show(); // ��ʾ��ά�봰��
+
 }
-void MainWindow::on_ColourButton_clicked()
+
+void MainWindow::on_modeButton_Released()
 {
-    if (currentMode) {
-            currentMode->exitMode();
-            delete currentMode;  // ɾ������ģʽʵ��
-            currentMode = nullptr;
-        }
-       this->hide();
-    // ������������ά��ģʽ
-    currentMode = new ScanColor(this); // ���� `this` ��Ϊ�����󣬱��ڹ�����������
-    currentMode->enterMode(this);
-    currentMode->show(); // ��ʾ��ά�봰��
-}
-void MainWindow::on_exitButton_clicked() {
+
+
+
+
+    // ������ά��ģʽ
     if (currentMode) {
         currentMode->exitMode();
         delete currentMode;
         currentMode = nullptr;
     }
-    qApp->quit(); // �ͷ�������Դ���˳�����
+
+    this->hide();
+
+    currentMode = new QRCode(this);
+    currentMode->enterMode(this);
+    currentMode->show();
 }
 
+void MainWindow::on_ColourButton_Pressed()
+{
+
+}
+
+void MainWindow::on_ColourButton_Released()
+{
 
 
+    // ������ɫģʽ
+    if (currentMode) {
+        currentMode->exitMode();
+        delete currentMode;
+        currentMode = nullptr;
+    }
+
+    this->hide();
+
+    currentMode = new ScanColor(this);
+    currentMode->enterMode(this);
+    currentMode->show();
+}
+
+void MainWindow::on_exitButton_Pressed()
+{
+
+
+}
+
+void MainWindow::on_exitButton_Released()
+{
+
+      if (currentMode) {
+          currentMode->exitMode();
+          delete currentMode;
+          currentMode = nullptr;
+      }
+    qApp->quit();
+}

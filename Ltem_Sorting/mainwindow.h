@@ -7,6 +7,8 @@
 #include "qrcode.h"
 #include "scancolor.h"
 #include <QKeyEvent>
+#include <QPropertyAnimation>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -20,14 +22,23 @@ public:
     ~MainWindow();
     void keyPressEvent(QKeyEvent *event);
 private slots:
-    void on_modeButton_clicked();  // ����ģʽ��ť�����¼�
-    void on_exitButton_clicked();
-    void on_ColourButton_clicked();
 
+    void on_modeButton_Pressed();
+    void on_modeButton_Released();   // ���°�ťʱ�����Ĳۺ���
+
+    void on_ColourButton_Released();
+    void on_ColourButton_Pressed();
+
+    void on_exitButton_Released();
+    void on_exitButton_Pressed();
+
+//     void   enterQRCodeMode();
+//     void  enterScanColorMode();
 private:
     Ui::MainWindow *ui;
     QPushButton *modeButton;  // ����������ά��ģʽ�İ�ť
-    Mode *currentMode;  // ��ǰ��ģʽ����ָ��
+    Mode *currentMode;  // ��ǰ��ģʽ�
+
 };
 
 #endif // MAINWINDOW_H

@@ -16,6 +16,7 @@ SOURCES += \
     mainwindow.cpp \
     mode.cpp \
     modemanager.cpp \
+    mytimer.cpp \
     qrcode.cpp \
     scancolor.cpp
 
@@ -24,6 +25,7 @@ HEADERS += \
     mainwindow.h \
     mode.h \
     modemanager.h \
+    mytimer.h \
     qrcode.h \
     scancolor.h
 

@@ -8,6 +8,7 @@
 #include <QElapsedTimer>
 #include <opencv2/opencv.hpp>
 #include <QTextEdit>
+
 class ExternalCamera : public QObject
 {
     Q_OBJECT
@@ -17,11 +18,14 @@ public:
     void start();
     void stop();
     QPixmap Mat2QImage(const cv::Mat &src);
-    QLabel* getCameraLabel();  // ����������������ȡ QLabe
+    QLabel* getCameraLabel();
+
 signals:
-    void frameReady(const cv::Mat &frame); // �źţ����ڴ��ݲ�����֡
-public  slots:
-    void display(); // �ۺ�����������ʾ����֡
+    void frameReady(const cv::Mat &frame);
+
+public slots:
+    void display();
+
 private:
     QTimer *timer;
     cv::VideoCapture videocapture;
@@ -30,7 +34,6 @@ private:
     int frameCount;
     double fps;
     QLabel *cameraLabel;
-
 };
 
 #endif // CAMERA_H

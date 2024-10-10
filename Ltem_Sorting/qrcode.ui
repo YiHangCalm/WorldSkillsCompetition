@@ -14,27 +14,11 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextEdit" name="informationEdit">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>240</y>
-      <width>321</width>
-      <height>291</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>文泉驿微米黑</family>
-      <pointsize>28</pointsize>
-     </font>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>830</x>
-      <y>440</y>
+      <x>840</x>
+      <y>460</y>
       <width>191</width>
       <height>121</height>
      </rect>
@@ -52,10 +36,10 @@
    <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>0</x>
       <y>0</y>
       <width>711</width>
-      <height>441</height>
+      <height>461</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -80,6 +64,11 @@
     </attribute>
     <column>
      <property name="text">
+      <string>编号</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
       <string>出发地</string>
      </property>
     </column>
@@ -91,6 +80,11 @@
     <column>
      <property name="text">
       <string>包裹类型</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>扫描时间</string>
      </property>
     </column>
    </widget>

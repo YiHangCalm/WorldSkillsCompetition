@@ -20,7 +20,7 @@ public:
 private slots:
 
 
-    void on_exitButton_clicked();
+    void on_exitBtn_clicked();
 
 private:
     void processFrame(const cv::Mat &frame);

@@ -15,8 +15,6 @@ void ScanColor::enterMode(QWidget *parentWidget)
         camera = std::make_unique<ExternalCamera>(this);
         camera->start();
 
-        // ���� QLabel �ĳߴ���ƥ������ͷ�ķֱ���
-
     }
 
     this->execute();
@@ -110,7 +108,7 @@ void ScanColor::processFrame(const cv::Mat &frame)
     camera->getCameraLabel()->setPixmap(qpixmap);
 }
 
-void ScanColor::on_exitButton_clicked()
+void ScanColor::on_exitBtn_clicked()
 {
     exitMode();
 }
