@@ -6,12 +6,47 @@ QRCode::QRCode(QWidget *parent)
 {
     ui.setupUi(this);
     this->showFullScreen();
-    ui.tableWidget->verticalHeader()->setVisible(false);
-    ui.tableWidget->setColumnWidth(0, 100);
+
+    ui.tableWidget->setStyleSheet(
+        "QTableWidget {"
+        "   background-color: #1E3A8A;"
+        "   alternate-background-color: #004080;"
+        "   gridline-color: #ffffff;"
+        "   border: 2px solid #ffffff;"  // ���ð�ɫ�߿�
+        "   color: #ffffff;"
+        "}"
+        "QHeaderView::section {"
+        "   background-color: #002244;"
+        "   color: #ffffff;"
+        "   font-weight: bold;"
+        "   padding: 6px;"
+        "   border: 1px solid #ffffff;"
+        "}"
+        "QTableWidget::item {"
+        "   border: 1px solid #004080;"
+        "   padding: 6px;"
+        "}"
+        "QTableWidget::item:selected {"
+        "   background-color: #0066cc;"
+        "   color: #ffffff;"
+        "}"
+    );
+    QFont headerFont = ui.tableWidget->horizontalHeader()->font();
+       headerFont.setPointSize(20);  // ����������С
+      headerFont.setBold(true);     // ���������Ӵ֣���ѡ��
+
+      QFont tableFont = ui.tableWidget->font();
+     tableFont.setPointSize(18); // ����������С
+    ui.tableWidget->setFont(tableFont);
+
+    ui.tableWidget->setColumnWidth(0, 120);
     ui.tableWidget->setColumnWidth(1, 130);
     ui.tableWidget->setColumnWidth(2, 130);
     ui.tableWidget->setColumnWidth(3, 130);
     ui.tableWidget->setColumnWidth(4, 200);
+    connect(ui.exButton, &QPushButton::pressed, this, &QRCode::on_exButton_Release);
+    connect(ui.exButton, &QPushButton::released, this, &QRCode::on_exButton_Pressed);
+    connect(ui.exButton, &QPushButton::released, this, &QRCode::on_exButton_Pressed);
 }
 
 void QRCode::enterMode(QWidget *parentWidget)
@@ -99,7 +134,7 @@ void QRCode::processFrame(const cv::Mat &frame)
                 ui.tableWidget->setItem(row, 4, item4.release());
             }
         }
-
+        ui.tableWidget->scrollToBottom();
         QPixmap qpixmap = camera->Mat2QImage(frameWithLines);
         camera->getCameraLabel()->setPixmap(qpixmap);
     } catch (const std::exception &e) {
@@ -120,8 +155,14 @@ void QRCode::processFrame(const cv::Mat &frame)
         qDebug() << "Unknown exception caught in processFrame";
     }
 }
-
-void QRCode::on_pushButton_clicked()
+void QRCode::on_exButton_Pressed()
 {
+    btn = std::make_unique<BtnEffect>(ui.exButton);
+    btn->zoom1();
+
+}
+void QRCode::on_exButton_Release()
+{
+
     exitMode();
 }

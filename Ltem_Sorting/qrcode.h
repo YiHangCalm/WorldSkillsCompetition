@@ -8,6 +8,7 @@
 #include "mytimer.h"
 #include <QFile>
 #include <QTextStream>
+#include "btneffect.h"
 
 class QRCode : public QMainWindow, public Mode
 {
@@ -21,12 +22,14 @@ public:
     void show() override;
 
 private slots:
-    void on_pushButton_clicked();
+    void on_exButton_Release();
+    void on_exButton_Pressed();
 
 private:
     void processFrame(const cv::Mat &frame);
     mytimer mytimer;
     Ui::qrcode ui;
+    std::unique_ptr<BtnEffect> btn;  // ʹ������ָ������ BtnEffect
     std::unique_ptr<ExternalCamera> camera;
     cv::QRCodeDetector qrDecoder;
     std::string lastDecodedText;

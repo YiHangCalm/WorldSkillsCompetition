@@ -13,33 +13,55 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#qrcode {
+
+    background-image: url(:/new/btn/Rese/backgud.png);
+    background-position: center;
+    background-repeat: no-repeat; 
+  
+}
+
+#centralwidget {
+    background: transparent;
+   border: none;
+        background: transparent;
+        padding: 0;
+       margin: 0; 
+}
+QPushButton#exButton {
+    border-image: url(:/new/btn/Rese/exmode.png);
+    
+     width: 203;  
+    height: 80px; 
+	font-size: 16px;
+	border: none;
+}
+QPushButton#slowButton {
+    border-image: url(:/new/btn/Rese/fast.png);
+    
+     width: 203;  
+    height: 80px; 
+	font-size: 16px;
+	border: none;
+}
+QPushButton#fastButton {
+    border-image: url(:/new/btn/Rese/slow.png);
+    
+     width: 203;  
+    height: 80px; 
+	font-size: 16px;
+	border: none;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>840</x>
-      <y>460</y>
-      <width>191</width>
-      <height>121</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>文泉驿点阵正黑</family>
-      <pointsize>16</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>返回</string>
-    </property>
-   </widget>
    <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
       <width>711</width>
-      <height>461</height>
+      <height>573</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -50,14 +72,17 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <pointsize>18</pointsize>
      </font>
     </property>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>33</number>
+    </attribute>
     <attribute name="horizontalHeaderDefaultSectionSize">
      <number>110</number>
     </attribute>
     <attribute name="verticalHeaderMinimumSectionSize">
-     <number>70</number>
+     <number>50</number>
     </attribute>
     <attribute name="verticalHeaderDefaultSectionSize">
      <number>70</number>
@@ -87,6 +112,96 @@
       <string>扫描时间</string>
      </property>
     </column>
+   </widget>
+   <widget class="QWidget" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>290</y>
+      <width>221</width>
+      <height>271</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="slowButton">
+       <property name="font">
+        <font>
+         <family>文泉驿点阵正黑</family>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="fastButton">
+       <property name="font">
+        <font>
+         <family>文泉驿点阵正黑</family>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="exButton">
+       <property name="font">
+        <font>
+         <family>文泉驿点阵正黑</family>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>0</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

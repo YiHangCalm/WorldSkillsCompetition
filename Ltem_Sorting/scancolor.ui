@@ -13,6 +13,31 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">#ScanColor {
+
+    background-image: url(:/new/btn/Rese/backgud.png);
+    background-position: center;
+    background-repeat: no-repeat; 
+  
+}
+
+#centralwidget {
+    background: transparent;
+   border: none;
+        background: transparent;
+        padding: 0;
+       margin: 0; 
+}
+QPushButton#exButton {
+    border-image: url(:/new/btn/Rese/exmode.png);
+    
+     width: 203;  
+    height: 80px; 
+	font-size: 16px;
+	border: none;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTextEdit" name="informationEdit">
     <property name="geometry">
@@ -24,10 +49,10 @@
      </rect>
     </property>
    </widget>
-   <widget class="QPushButton" name="exitBtn">
+   <widget class="QPushButton" name="exButton">
     <property name="geometry">
      <rect>
-      <x>840</x>
+      <x>790</x>
       <y>480</y>
       <width>181</width>
       <height>71</height>
@@ -35,11 +60,11 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <pointsize>-1</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>退出</string>
+     <string/>
     </property>
    </widget>
   </widget>

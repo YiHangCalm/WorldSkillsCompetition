@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QEventLoop>
+#include <memory>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -9,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     this->showFullScreen();
-
 
     connect(ui->modeButton, &QPushButton::pressed, this, &MainWindow::on_modeButton_Pressed);
     connect(ui->modeButton, &QPushButton::released, this, &MainWindow::on_modeButton_Released);
@@ -32,48 +32,56 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape) {
         if (isFullScreen()) {
-            showNormal();  // �˳�ȫ��״̬
+            showNormal();
         } else {
-            showFullScreen();  // ����ȫ��״̬
+            showFullScreen();
         }
     }
 }
 
 void MainWindow::on_modeButton_Pressed()
 {
-
+    btn = std::make_unique<BtnEffect>(ui->modeButton);
+    btn->zoom1();
 }
 
-void MainWindow::on_modeButton_Released()
-{
+void MainWindow::on_modeButton_Released() {
+    if (btn) {
+            QEventLoop loop;
+            connect(btn->getAnimation(), &QPropertyAnimation::finished, &loop, &QEventLoop::quit);
+            btn->zoom2();
+            loop.exec();
+            btn.reset();
+        }
 
+        if (currentMode) {
+            currentMode->exitMode();
+            delete currentMode;
+            currentMode = nullptr;
+        }
 
+        this->hide();
 
-
-    // ������ά��ģʽ
-    if (currentMode) {
-        currentMode->exitMode();
-        delete currentMode;
-        currentMode = nullptr;
-    }
-
-    this->hide();
-
-    currentMode = new QRCode(this);
-    currentMode->enterMode(this);
-    currentMode->show();
+        currentMode = new QRCode(this);
+        currentMode->enterMode(this);
+        currentMode->show();
 }
 
 void MainWindow::on_ColourButton_Pressed()
 {
-
+    btn = std::make_unique<BtnEffect>(ui->ColourButton);
+    btn->zoom1();
 }
 
 void MainWindow::on_ColourButton_Released()
 {
-
-
-    // ������ɫģʽ
+    if (btn) {
+        QEventLoop loop;
+        connect(btn->getAnimation(), &QPropertyAnimation::finished, &loop, &QEventLoop::quit);
+        btn->zoom2();
+        loop.exec();
+        btn.reset();
+    }
     if (currentMode) {
         currentMode->exitMode();
         delete currentMode;
@@ -89,17 +97,25 @@ void MainWindow::on_ColourButton_Released()
 
 void MainWindow::on_exitButton_Pressed()
 {
-
-
+    btn = std::make_unique<BtnEffect>(ui->exitButton);
+    btn->zoom1();
 }
 
 void MainWindow::on_exitButton_Released()
 {
 
-      if (currentMode) {
-          currentMode->exitMode();
-          delete currentMode;
-          currentMode = nullptr;
-      }
+    if (btn) {
+            QEventLoop loop;
+            connect(btn->getAnimation(), &QPropertyAnimation::finished, &loop, &QEventLoop::quit);
+            btn->zoom2();
+            loop.exec();
+            btn.reset();
+        }
+    if (currentMode) {
+        currentMode->exitMode();
+        delete currentMode;
+        currentMode = nullptr;
+    }
     qApp->quit();
 }
+

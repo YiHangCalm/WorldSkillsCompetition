@@ -8,6 +8,8 @@
 #include "scancolor.h"
 #include <QKeyEvent>
 #include <QPropertyAnimation>
+#include "btneffect.h"
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,7 +26,7 @@ public:
 private slots:
 
     void on_modeButton_Pressed();
-    void on_modeButton_Released();   // ���°�ťʱ�����Ĳۺ���
+    void on_modeButton_Released();
 
     void on_ColourButton_Released();
     void on_ColourButton_Pressed();
@@ -32,13 +34,10 @@ private slots:
     void on_exitButton_Released();
     void on_exitButton_Pressed();
 
-//     void   enterQRCodeMode();
-//     void  enterScanColorMode();
 private:
+    std::unique_ptr<BtnEffect> btn;
     Ui::MainWindow *ui;
-    QPushButton *modeButton;  // ����������ά��ģʽ�İ�ť
-    Mode *currentMode;  // ��ǰ��ģʽ�
-
+    QPushButton *modeButton;
+    Mode *currentMode;
 };
-
-#endif // MAINWINDOW_H
+#endif

@@ -7,5 +7,9 @@
         <file>Rese/exbtn.png</file>
         <file>Rese/jiancebtn.png</file>
         <file>Rese/clrbtn.png</file>
+        <file>Rese/exmode.png</file>
+        <file>Rese/backgud.png</file>
+        <file>Rese/fast.png</file>
+        <file>Rese/slow.png</file>
     </qresource>
 </RCC>

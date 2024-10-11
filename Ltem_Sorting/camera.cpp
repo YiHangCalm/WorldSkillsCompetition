@@ -6,6 +6,7 @@ ExternalCamera::ExternalCamera(QWidget *parent)
     // ��ʼ�� QLabel ����ʾ����ͷ�Ļ���
     cameraLabel = new QLabel(parent);
     cameraLabel->setGeometry(711, 0, 320, 240);  // ���� QLabel �Ĵ�СΪ 320x240
+    cameraLabel->setStyleSheet("border: 2px solid white;");  // ʹ����ʽ�����ñ߿���ɫ������
     cameraLabel->show();
 
     // ���Ӷ�ʱ����ʱ�źŵ� display �ۺ���

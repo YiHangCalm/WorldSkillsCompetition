@@ -48,7 +48,7 @@ QPushButton#modeButton {
     background: none;  
 	border-image: url(:/new/btn/Rese/qrbtn.png);
     color: black;
-    width: 150px;  
+    width: 203;  
     height: 80px; 
 	
 }
@@ -58,8 +58,8 @@ QPushButton#ColourButton {
     
 	border-image: url(:/new/btn/Rese/clrbtn.png);
    
-    width: 150px;  
-    height: 50px;   
+     width: 203;  
+    height: 80px; 
 	font-size: 16px;
 	border: none;
 }
@@ -67,16 +67,16 @@ QPushButton#InspectButton{
     
 	border-image: url(:/new/btn/Rese/jiancebtn.png);
     
-    width: 150px;   
-    height: 50px;
+     width: 203;  
+    height: 80px; 
 	font-size: 16px;   
 	border: none;
 }
 QPushButton#exitButton {
     border-image: url(:/new/btn/Rese/exbtn.png);
     
-    width: 150px;   
-    height: 50px;   
+     width: 203;  
+    height: 80px; 
 	font-size: 16px;
 	border: none;
 }
@@ -88,15 +88,15 @@ QPushButton:focus {
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>750</x>
+      <x>730</x>
       <y>60</y>
-      <width>221</width>
-      <height>452</height>
+      <width>241</width>
+      <height>501</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <spacer name="verticalSpacer">
+      <spacer name="verticalSpacer_5">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
@@ -122,7 +122,7 @@ QPushButton:focus {
       </widget>
      </item>
      <item>
-      <spacer name="verticalSpacer_2">
+      <spacer name="verticalSpacer_4">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
@@ -136,11 +136,11 @@ QPushButton:focus {
      </item>
      <item>
       <widget class="QPushButton" name="ColourButton">
-       <property name="minimumSize">
-        <size>
-         <width>203</width>
-         <height>80</height>
-        </size>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>203</verstretch>
+        </sizepolicy>
        </property>
        <property name="text">
         <string/>
@@ -148,7 +148,7 @@ QPushButton:focus {
       </widget>
      </item>
      <item>
-      <spacer name="verticalSpacer_5">
+      <spacer name="verticalSpacer_3">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
@@ -162,11 +162,11 @@ QPushButton:focus {
      </item>
      <item>
       <widget class="QPushButton" name="InspectButton">
-       <property name="minimumSize">
-        <size>
-         <width>203</width>
-         <height>80</height>
-        </size>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <property name="text">
         <string/>
@@ -174,7 +174,7 @@ QPushButton:focus {
       </widget>
      </item>
      <item>
-      <spacer name="verticalSpacer_6">
+      <spacer name="verticalSpacer_2">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>
@@ -188,22 +188,29 @@ QPushButton:focus {
      </item>
      <item>
       <widget class="QPushButton" name="exitButton">
-       <property name="minimumSize">
-        <size>
-         <width>203</width>
-         <height>80</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <family>文泉驿点阵正黑</family>
-         <pointsize>-1</pointsize>
-        </font>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
        <property name="text">
         <string/>
        </property>
       </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </widget>
