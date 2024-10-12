@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ScanColor_t {
     QByteArrayData data[3];
-    char stringdata0[33];
+    char stringdata0[30];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -33,11 +33,11 @@ struct qt_meta_stringdata_ScanColor_t {
 static const qt_meta_stringdata_ScanColor_t qt_meta_stringdata_ScanColor = {
     {
 QT_MOC_LITERAL(0, 0, 9), // "ScanColor"
-QT_MOC_LITERAL(1, 10, 21), // "on_exitButton_clicked"
-QT_MOC_LITERAL(2, 32, 0) // ""
+QT_MOC_LITERAL(1, 10, 18), // "on_exitBtn_clicked"
+QT_MOC_LITERAL(2, 29, 0) // ""
 
     },
-    "ScanColor\0on_exitButton_clicked\0"
+    "ScanColor\0on_exitBtn_clicked\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -69,7 +69,7 @@ void ScanColor::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         auto *_t = static_cast<ScanColor *>(_o);
         (void)_t;
         switch (_id) {
-        case 0: _t->on_exitButton_clicked(); break;
+        case 0: _t->on_exitBtn_clicked(); break;
         default: ;
         }
     }

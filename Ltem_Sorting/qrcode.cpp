@@ -45,8 +45,8 @@ QRCode::QRCode(QWidget *parent)
     ui.tableWidget->setColumnWidth(3, 130);
     ui.tableWidget->setColumnWidth(4, 200);
     connect(ui.exButton, &QPushButton::pressed, this, &QRCode::on_exButton_Release);
-    connect(ui.exButton, &QPushButton::released, this, &QRCode::on_exButton_Pressed);
-    connect(ui.exButton, &QPushButton::released, this, &QRCode::on_exButton_Pressed);
+    //connect(ui.slowButton, &QPushButton::released, this, &QRCode::on_slowButton_Pressed);
+    //connect(ui.fastButton, &QPushButton::released, this, &QRCode::on_fastButton_Pressed);
 }
 
 void QRCode::enterMode(QWidget *parentWidget)
@@ -96,6 +96,17 @@ void QRCode::show()
     QMainWindow::show();
     this->raise(); // ȷ��������ǰ̨��ʾ
     this->activateWindow(); // �����
+}
+
+void QRCode::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Escape) {
+        if (isFullScreen()) {
+            showNormal();
+        } else {
+            showFullScreen();
+        }
+    }
 }
 
 void QRCode::processFrame(const cv::Mat &frame)

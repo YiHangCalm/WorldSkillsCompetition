@@ -5,7 +5,7 @@
 #include "mode.h"
 #include "camera.h"
 #include "ui_scancolor.h"
-
+#include <QKeyEvent>
 class ScanColor : public QMainWindow , public Mode
 {
     Q_OBJECT
@@ -16,6 +16,7 @@ public:
     void execute();
     void exitMode();
     void show();
+   void  keyPressEvent(QKeyEvent *event);
 
 private slots:
 

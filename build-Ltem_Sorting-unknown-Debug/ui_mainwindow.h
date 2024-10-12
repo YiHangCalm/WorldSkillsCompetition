@@ -27,14 +27,15 @@ public:
     QWidget *centralwidget;
     QWidget *widget;
     QVBoxLayout *verticalLayout;
-    QSpacerItem *verticalSpacer;
-    QPushButton *modeButton;
-    QSpacerItem *verticalSpacer_2;
-    QPushButton *ColourButton;
     QSpacerItem *verticalSpacer_5;
-    QPushButton *InspectButton;
-    QSpacerItem *verticalSpacer_6;
+    QPushButton *modeButton;
+    QSpacerItem *verticalSpacer_4;
+    QPushButton *ColourButton;
+    QSpacerItem *verticalSpacer_3;
+    QPushButton *usatbtn;
+    QSpacerItem *verticalSpacer_2;
     QPushButton *exitButton;
+    QSpacerItem *verticalSpacer;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -49,98 +50,139 @@ public:
         sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
         MainWindow->setSizePolicy(sizePolicy);
         MainWindow->setStyleSheet(QString::fromUtf8("#MainWindow {\n"
+"\n"
 "    background-image: url(:/new/prefix1/Rese/back.png);\n"
 "    background-position: center;\n"
 "    background-repeat: no-repeat; \n"
 "  \n"
 "}\n"
+"\n"
 "#centralwidget {\n"
 "    background: transparent;\n"
+"   border: none;\n"
+"        background: transparent;\n"
+"        padding: 0;\n"
+"       margin: 0; \n"
 "}\n"
 "\n"
+"QWidget#widget {\n"
+"        border: none;\n"
+"        background: transparent;\n"
+"        padding: 0;\n"
+"       margin: 0; \n"
+"    }\n"
 "QPushButton#modeButton {\n"
-"    background-color: rgb(34, 255, 211);\n"
+"	\n"
+"  	 border: none; \n"
+"    background: none;  \n"
+"	border-image: url(:/new/btn/Rese/qrbtn.png);\n"
 "    color: black;\n"
-"    width: 150px;  \n"
-"    height: 50px; \n"
-"	font-size: 16px; \n"
+"    width: 203;  \n"
+"    height: 80px; \n"
+"	\n"
 "}\n"
 "\n"
 "QPushButton#ColourButton {\n"
-"    background-color: rgb(34, 255, 211);\n"
-"    color: black;\n"
-"    width: 150px;  \n"
-"    height: 50px;   \n"
+"\n"
+"    \n"
+"	border-image: url(:/new/btn/Rese/clrbtn.png);\n"
+"   \n"
+"     width: 203;  \n"
+"    height: 80px; \n"
 "	font-size: 16px;\n"
+"	border: none;\n"
 "}\n"
 "QPushButton#InspectButton{\n"
-"    background-color: rgb(34, 255, 211);\n"
-"    color: black;\n"
-"    width: 150px;   \n"
-"    height: 50px;\n"
+"    \n"
+"	border-image: url(:/new/btn/Rese/jiancebtn.png);\n"
+"    \n"
+"     width: 203; "
+                        " \n"
+"    height: 80px; \n"
 "	font-size: 16px;   \n"
+"	border: none;\n"
+"}\n"
+"QPushButton#usatbtn {\n"
+"	\n"
+"  	border-image: url(:/new/btn/Rese/jiancebtn.png);\n"
+"    \n"
+"     width: 203;  \n"
+"    height: 80px; \n"
+"	font-size: 16px;   \n"
+"	border: none;\n"
+"	\n"
 "}\n"
 "QPushButton#exitButton {\n"
-"    background-color: rgb(34, 255, 211);\n"
-"    color: black;\n"
-"    width: 150px;   \n"
-"    height: 50px;   \n"
+"    border-image: url(:/new/btn/Rese/exbtn.png);\n"
+"    \n"
+"     width: 203;  \n"
+"    height: 80px; \n"
 "	font-size: 16px;\n"
-"}"));
+"	border: none;\n"
+"}\n"
+"QPushButton:focus {\n"
+"        outline: none;\n"
+"    }"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         widget = new QWidget(centralwidget);
         widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(770, 60, 176, 452));
+        widget->setGeometry(QRect(730, 20, 241, 501));
         verticalLayout = new QVBoxLayout(widget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        verticalSpacer_5 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        verticalLayout->addItem(verticalSpacer);
+        verticalLayout->addItem(verticalSpacer_5);
 
         modeButton = new QPushButton(widget);
         modeButton->setObjectName(QString::fromUtf8("modeButton"));
-        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Maximum);
+        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(modeButton->sizePolicy().hasHeightForWidth());
         modeButton->setSizePolicy(sizePolicy1);
-        modeButton->setMaximumSize(QSize(200, 600));
-        QFont font;
-        modeButton->setFont(font);
-        modeButton->setStyleSheet(QString::fromUtf8(""));
 
         verticalLayout->addWidget(modeButton);
+
+        verticalSpacer_4 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer_4);
+
+        ColourButton = new QPushButton(widget);
+        ColourButton->setObjectName(QString::fromUtf8("ColourButton"));
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(203);
+        sizePolicy2.setHeightForWidth(ColourButton->sizePolicy().hasHeightForWidth());
+        ColourButton->setSizePolicy(sizePolicy2);
+
+        verticalLayout->addWidget(ColourButton);
+
+        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer_3);
+
+        usatbtn = new QPushButton(widget);
+        usatbtn->setObjectName(QString::fromUtf8("usatbtn"));
+        sizePolicy1.setHeightForWidth(usatbtn->sizePolicy().hasHeightForWidth());
+        usatbtn->setSizePolicy(sizePolicy1);
+
+        verticalLayout->addWidget(usatbtn);
 
         verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer_2);
 
-        ColourButton = new QPushButton(widget);
-        ColourButton->setObjectName(QString::fromUtf8("ColourButton"));
-
-        verticalLayout->addWidget(ColourButton);
-
-        verticalSpacer_5 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout->addItem(verticalSpacer_5);
-
-        InspectButton = new QPushButton(widget);
-        InspectButton->setObjectName(QString::fromUtf8("InspectButton"));
-
-        verticalLayout->addWidget(InspectButton);
-
-        verticalSpacer_6 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout->addItem(verticalSpacer_6);
-
         exitButton = new QPushButton(widget);
         exitButton->setObjectName(QString::fromUtf8("exitButton"));
-        QFont font1;
-        font1.setFamily(QString::fromUtf8("\346\226\207\346\263\211\351\251\277\347\202\271\351\230\265\346\255\243\351\273\221"));
-        exitButton->setFont(font1);
+        sizePolicy1.setHeightForWidth(exitButton->sizePolicy().hasHeightForWidth());
+        exitButton->setSizePolicy(sizePolicy1);
 
         verticalLayout->addWidget(exitButton);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
@@ -159,10 +201,10 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        modeButton->setText(QCoreApplication::translate("MainWindow", "QRCode_Mode", nullptr));
-        ColourButton->setText(QCoreApplication::translate("MainWindow", "Colour_Mode", nullptr));
-        InspectButton->setText(QCoreApplication::translate("MainWindow", "PushButton", nullptr));
-        exitButton->setText(QCoreApplication::translate("MainWindow", "EXIT", nullptr));
+        modeButton->setText(QString());
+        ColourButton->setText(QString());
+        usatbtn->setText(QString());
+        exitButton->setText(QString());
     } // retranslateUi
 
 };

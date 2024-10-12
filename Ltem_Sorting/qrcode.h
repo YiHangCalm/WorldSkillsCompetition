@@ -9,7 +9,7 @@
 #include <QFile>
 #include <QTextStream>
 #include "btneffect.h"
-
+#include <QKeyEvent>
 class QRCode : public QMainWindow, public Mode
 {
     Q_OBJECT
@@ -20,7 +20,7 @@ public:
     void execute() override;
     void exitMode() override;
     void show() override;
-
+    void  keyPressEvent(QKeyEvent *event);
 private slots:
     void on_exButton_Release();
     void on_exButton_Pressed();

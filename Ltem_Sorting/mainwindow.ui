@@ -72,6 +72,16 @@ QPushButton#InspectButton{
 	font-size: 16px;   
 	border: none;
 }
+QPushButton#usatbtn {
+	
+  	border-image: url(:/new/btn/Rese/jiancebtn.png);
+    
+     width: 203;  
+    height: 80px; 
+	font-size: 16px;   
+	border: none;
+	
+}
 QPushButton#exitButton {
     border-image: url(:/new/btn/Rese/exbtn.png);
     
@@ -89,7 +99,7 @@ QPushButton:focus {
     <property name="geometry">
      <rect>
       <x>730</x>
-      <y>60</y>
+      <y>20</y>
       <width>241</width>
       <height>501</height>
      </rect>
@@ -161,7 +171,7 @@ QPushButton:focus {
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="InspectButton">
+      <widget class="QPushButton" name="usatbtn">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>

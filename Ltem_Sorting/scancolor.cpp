@@ -7,6 +7,7 @@ ScanColor::ScanColor(QWidget *parent)
 {
     ui.setupUi(this);
     this->showFullScreen();
+    connect(ui.exButton, &QPushButton::clicked, this, &ScanColor::on_exitBtn_clicked);
 }
 
 void ScanColor::enterMode(QWidget *parentWidget)
@@ -106,6 +107,16 @@ void ScanColor::processFrame(const cv::Mat &frame)
 
     QPixmap qpixmap = camera->Mat2QImage(result);
     camera->getCameraLabel()->setPixmap(qpixmap);
+}
+void ScanColor::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Escape) {
+        if (isFullScreen()) {
+            showNormal();
+        } else {
+            showFullScreen();
+        }
+    }
 }
 
 void ScanColor::on_exitBtn_clicked()

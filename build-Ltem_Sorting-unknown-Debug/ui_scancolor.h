@@ -11,11 +11,9 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QWidget>
@@ -26,10 +24,8 @@ class Ui_ScanColor
 {
 public:
     QWidget *centralwidget;
-    QGridLayout *gridLayout;
-    QSpacerItem *horizontalSpacer;
     QTextEdit *informationEdit;
-    QPushButton *exitButton;
+    QPushButton *exButton;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -37,32 +33,44 @@ public:
     {
         if (ScanColor->objectName().isEmpty())
             ScanColor->setObjectName(QString::fromUtf8("ScanColor"));
-        ScanColor->resize(800, 600);
+        ScanColor->resize(1024, 600);
+        ScanColor->setStyleSheet(QString::fromUtf8("#ScanColor {\n"
+"\n"
+"    background-image: url(:/new/btn/Rese/backgud.png);\n"
+"    background-position: center;\n"
+"    background-repeat: no-repeat; \n"
+"  \n"
+"}\n"
+"\n"
+"#centralwidget {\n"
+"    background: transparent;\n"
+"   border: none;\n"
+"        background: transparent;\n"
+"        padding: 0;\n"
+"       margin: 0; \n"
+"}\n"
+"QPushButton#exButton {\n"
+"    border-image: url(:/new/btn/Rese/exmode.png);\n"
+"    \n"
+"     width: 203;  \n"
+"    height: 80px; \n"
+"	font-size: 16px;\n"
+"	border: none;\n"
+"}"));
         centralwidget = new QWidget(ScanColor);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-        gridLayout = new QGridLayout(centralwidget);
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        horizontalSpacer = new QSpacerItem(254, 20, QSizePolicy::Ignored, QSizePolicy::Minimum);
-
-        gridLayout->addItem(horizontalSpacer, 0, 0, 1, 1);
-
         informationEdit = new QTextEdit(centralwidget);
         informationEdit->setObjectName(QString::fromUtf8("informationEdit"));
-
-        gridLayout->addWidget(informationEdit, 0, 1, 2, 2);
-
-        exitButton = new QPushButton(centralwidget);
-        exitButton->setObjectName(QString::fromUtf8("exitButton"));
+        informationEdit->setGeometry(QRect(0, 0, 581, 491));
+        exButton = new QPushButton(centralwidget);
+        exButton->setObjectName(QString::fromUtf8("exButton"));
+        exButton->setGeometry(QRect(790, 480, 181, 71));
         QFont font;
-        font.setPointSize(20);
-        exitButton->setFont(font);
-
-        gridLayout->addWidget(exitButton, 2, 2, 1, 1);
-
+        exButton->setFont(font);
         ScanColor->setCentralWidget(centralwidget);
         menubar = new QMenuBar(ScanColor);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 21));
+        menubar->setGeometry(QRect(0, 0, 1024, 21));
         ScanColor->setMenuBar(menubar);
         statusbar = new QStatusBar(ScanColor);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -76,7 +84,7 @@ public:
     void retranslateUi(QMainWindow *ScanColor)
     {
         ScanColor->setWindowTitle(QCoreApplication::translate("ScanColor", "MainWindow", nullptr));
-        exitButton->setText(QCoreApplication::translate("ScanColor", "\351\200\200\345\207\272", nullptr));
+        exButton->setText(QString());
     } // retranslateUi
 
 };
