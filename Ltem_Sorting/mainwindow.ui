@@ -74,7 +74,7 @@ QPushButton#InspectButton{
 }
 QPushButton#usatbtn {
 	
-  	border-image: url(:/new/btn/Rese/jiancebtn.png);
+  	border-image: url(:/new/btn/Rese/Serial.png);
     
      width: 203;  
     height: 80px; 
@@ -99,7 +99,7 @@ QPushButton:focus {
     <property name="geometry">
      <rect>
       <x>730</x>
-      <y>20</y>
+      <y>80</y>
       <width>241</width>
       <height>501</height>
      </rect>

@@ -11,5 +11,9 @@
         <file>Rese/backgud.png</file>
         <file>Rese/fast.png</file>
         <file>Rese/slow.png</file>
+        <file>Rese/exmenu.png</file>
+        <file>Rese/openserial.png</file>
+        <file>Rese/send.png</file>
+        <file>Rese/Serial.png</file>
     </qresource>
 </RCC>

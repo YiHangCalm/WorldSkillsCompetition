@@ -21,11 +21,19 @@
     background-repeat: no-repeat; 
   
 }
+
 #textEdit {
-    background-color: #1E3A8A;
-    border: 2px solid white;  
+    background-color: #FFFFFF;  /* �����ı����ı���ɫ */
+    border: 2px solid #F2F2F2;  /* ǳ��ɫ�߿� */
     font-size: 16px;      
-    color: white;            
+    color: black;            
+}
+#plainTextEdit
+ {
+    background-color: #FFFFFF;  /* �����ı����ı���ɫ */
+    border: 2px solid #F2F2F2;  /* ǳ��ɫ�߿� */
+    font-size: 16px;      
+    color: black;            
 }
 #centralwidget {
     background: transparent;
@@ -35,7 +43,7 @@
        margin: 0; 
 }
 QPushButton#exButton {
-    border-image: url(:/new/btn/Rese/exmode.png);
+    border-image: url(:/new/btn/Rese/exmenu.png);
     
      width: 200;  
     height: 80px; 
@@ -43,22 +51,31 @@ QPushButton#exButton {
 	border: none;
 }
 QPushButton#open {
-    border-image: url(:/new/btn/Rese/exmode.png);
+    border-image: url(:/new/btn/Rese/openserial.png);
     
      width: 200;  
     height: 80px; 
 	font-size: 16px;
 	border: none;
-}</string>
+}
+QPushButton#senddata {
+    border-image: url(:/new/btn/Rese/send.png);
+    
+     width: 200;  
+    height: 80px; 
+	font-size: 16px;
+	border: none;
+}
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>608</x>
-      <y>10</y>
-      <width>331</width>
-      <height>201</height>
+      <x>600</x>
+      <y>20</y>
+      <width>301</width>
+      <height>241</height>
      </rect>
     </property>
     <layout class="QFormLayout" name="formLayout">
@@ -72,53 +89,105 @@ QPushButton#open {
      <item row="0" column="1">
       <widget class="QComboBox" name="serial"/>
      </item>
-     <item row="1" column="0">
+     <item row="2" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>波特率：</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="2" column="1">
       <widget class="QComboBox" name="baudrate"/>
      </item>
-     <item row="2" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>停止位：</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="4" column="1">
       <widget class="QComboBox" name="stop"/>
      </item>
-     <item row="3" column="0">
+     <item row="6" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>数据位：</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="6" column="1">
       <widget class="QComboBox" name="data"/>
      </item>
-     <item row="4" column="0">
+     <item row="8" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
         <string>奇偶校验位：</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="8" column="1">
       <widget class="QComboBox" name="parity"/>
+     </item>
+     <item row="7" column="1">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="5" column="1">
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="3" column="1">
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="1">
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </widget>
    <widget class="QPushButton" name="open">
     <property name="geometry">
      <rect>
-      <x>720</x>
-      <y>210</y>
+      <x>670</x>
+      <y>290</y>
       <width>181</width>
       <height>61</height>
      </rect>
@@ -140,14 +209,37 @@ QPushButton#open {
    <widget class="QPushButton" name="exButton">
     <property name="geometry">
      <rect>
-      <x>720</x>
-      <y>360</y>
+      <x>760</x>
+      <y>470</y>
       <width>181</width>
       <height>61</height>
      </rect>
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="senddata">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>470</y>
+      <width>171</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="plainTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>430</y>
+      <width>521</width>
+      <height>131</height>
+     </rect>
     </property>
    </widget>
   </widget>

@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent)
            qDebug() << "Initializing sharedSerial...";
            sharedSerial = std::make_shared<MySerial>(this);
        }
+    MainWindow::sharedSerial->openConnection();
     connect(ui->modeButton, &QPushButton::pressed, this, &MainWindow::on_modeButton_Pressed);
     connect(ui->modeButton, &QPushButton::released, this, &MainWindow::on_modeButton_Released);
     connect(ui->ColourButton, &QPushButton::pressed, this, &MainWindow::on_ColourButton_Pressed);
