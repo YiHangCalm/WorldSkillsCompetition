@@ -15,5 +15,7 @@
         <file>Rese/openserial.png</file>
         <file>Rese/send.png</file>
         <file>Rese/Serial.png</file>
+        <file>Rese/HSV.png</file>
+        <file>Rese/senddata.png</file>
     </qresource>
 </RCC>

@@ -34,6 +34,7 @@ private:
     int frameCount;
     double fps;
     QLabel *cameraLabel;
+    bool isProcessing;  // ���� isProcessing ����
 };
 
 #endif // CAMERA_H

@@ -1,6 +1,7 @@
 QT       += core gui serialport
 
 FORMS += \
+    hsvajustdialog.ui \
     myserial.ui \
     qrcode.ui \
     scancolor.ui
@@ -15,6 +16,7 @@ CONFIG += c++17
 SOURCES += \
     btneffect.cpp \
     camera.cpp \
+    hsvajustdialog.cpp \
     main.cpp \
     mainwindow.cpp \
     mode.cpp \
@@ -22,18 +24,21 @@ SOURCES += \
     myserial.cpp \
     mytimer.cpp \
     qrcode.cpp \
-    scancolor.cpp
+    scancolor.cpp \
+    workthread.cpp
 
 HEADERS += \
     btneffect.h \
     camera.h \
+    hsvajustdialog.h \
     mainwindow.h \
     mode.h \
     modemanager.h \
     myserial.h \
     mytimer.h \
     qrcode.h \
-    scancolor.h
+    scancolor.h \
+    workthread.h
 
 FORMS += \
     mainwindow.ui

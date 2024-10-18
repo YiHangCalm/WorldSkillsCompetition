@@ -36,6 +36,14 @@ QPushButton#exButton {
     height: 80px; 
 	font-size: 16px;
 	border: none;
+}
+QPushButton#adjust {
+    border-image: url(:/new/btn/Rese/HSV.png);
+    
+     width: 203;  
+    height: 80px; 
+	font-size: 16px;
+	border: none;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -77,7 +85,7 @@ QPushButton#exButton {
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="bin">
@@ -90,20 +98,22 @@ QPushButton#exButton {
      </rect>
     </property>
     <property name="text">
-     <string>TextLabel</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="adjust">
     <property name="geometry">
      <rect>
-      <x>780</x>
+      <x>790</x>
       <y>380</y>
       <width>181</width>
       <height>71</height>
      </rect>
     </property>
     <property name="font">
-     <font/>
+     <font>
+      <pointsize>-1</pointsize>
+     </font>
     </property>
     <property name="text">
      <string/>

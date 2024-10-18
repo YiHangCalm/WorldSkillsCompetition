@@ -38,7 +38,7 @@ QPushButton#exButton {
 	border: none;
 }
 QPushButton#slowButton {
-    border-image: url(:/new/btn/Rese/fast.png);
+    border-image: url(:/new/btn/Rese/slow.png);
     
      width: 203;  
     height: 80px; 
@@ -46,7 +46,7 @@ QPushButton#slowButton {
 	border: none;
 }
 QPushButton#fastButton {
-    border-image: url(:/new/btn/Rese/slow.png);
+    border-image: url(:/new/btn/Rese/fast.png);
     
      width: 203;  
     height: 80px; 
@@ -124,7 +124,7 @@ QPushButton#fastButton {
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QPushButton" name="fastButton">
+      <widget class="QPushButton" name="slowButton">
        <property name="font">
         <font>
          <family>文泉驿点阵正黑</family>
@@ -150,7 +150,7 @@ QPushButton#fastButton {
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="slowButton">
+      <widget class="QPushButton" name="fastButton">
        <property name="font">
         <font>
          <family>文泉驿点阵正黑</family>

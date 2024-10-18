@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
            sharedSerial = std::make_shared<MySerial>(this);
        }
     MainWindow::sharedSerial->openConnection();
+     MainWindow::sharedSerial->sendDataPacket("play",MySerial::PacketType::Command);
     connect(ui->modeButton, &QPushButton::pressed, this, &MainWindow::on_modeButton_Pressed);
     connect(ui->modeButton, &QPushButton::released, this, &MainWindow::on_modeButton_Released);
     connect(ui->ColourButton, &QPushButton::pressed, this, &MainWindow::on_ColourButton_Pressed);
@@ -70,7 +71,7 @@ void MainWindow::on_modeButton_Released() {
     }
 
     this->hide();
-
+    MainWindow::sharedSerial->sendDataPacket("qr",MySerial::PacketType::Command);
     currentMode = new QRCode(this);
     currentMode->enterMode(this);
     currentMode->show();
@@ -96,7 +97,7 @@ void MainWindow::on_ColourButton_Released()
         delete currentMode;
         currentMode = nullptr;
     }
-
+    MainWindow::sharedSerial->sendDataPacket("color",MySerial::PacketType::Command);
     this->hide();
 
     currentMode = new ScanColor(this);

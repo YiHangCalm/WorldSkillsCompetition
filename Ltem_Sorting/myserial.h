@@ -14,10 +14,14 @@ class MySerial : public QMainWindow
 public:
     explicit MySerial(QWidget *parent = nullptr);
     ~MySerial();
+    enum class PacketType {
+        Data,      // ���ݰ�
+        Command    // ������
+    };
     void sendData(const QString &dataToSend);
     void openConnection();
+  void sendDataPacket(const QString &dataToSend, PacketType packetType);
 
-   void sendDataPacket(const QString &dataToSend);
 private slots:
     void on_exButton_Release();
     void recvSLOTS();
@@ -25,11 +29,14 @@ private slots:
    // void   on_senddata_Pressed();
     void on_senddata_clicked();
 
+    void on_senddata_2_clicked();
+
 private:
     Ui::MySerial *ui;
    std::unique_ptr<BtnEffect> btn;
     QSerialPort *serialPort_;
     mytimer mytimer;
+
 };
 
 #endif // MYSERIAL_H

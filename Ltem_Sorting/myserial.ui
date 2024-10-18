@@ -66,7 +66,14 @@ QPushButton#senddata {
 	font-size: 16px;
 	border: none;
 }
-</string>
+QPushButton#senddata_2 {
+    border-image: url(:/new/btn/Rese/senddata.png);
+    
+     width: 200;  
+    height: 80px; 
+	font-size: 16px;
+	border: none;
+}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="widget" native="true">
@@ -223,7 +230,7 @@ QPushButton#senddata {
     <property name="geometry">
      <rect>
       <x>570</x>
-      <y>470</y>
+      <y>430</y>
       <width>171</width>
       <height>61</height>
      </rect>
@@ -240,6 +247,19 @@ QPushButton#senddata {
       <width>521</width>
       <height>131</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="senddata_2">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>500</y>
+      <width>171</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
     </property>
    </widget>
   </widget>

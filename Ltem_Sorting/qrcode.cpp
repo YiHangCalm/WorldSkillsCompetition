@@ -143,19 +143,30 @@ void QRCode::processFrame(const cv::Mat &frame)
     try {
         cv::Mat frameWithLines = frame.clone();
 
+        // ����ʹ�ý��������Ⲣ������ά��
         std::string decodedText = this->qrDecoder.detectAndDecode(frameWithLines, this->points);
-        if (points.size() < 4 && !decodedText.empty()) {
-                   checkDamagedQRCode();
-                   return;
-               }
 
+        // �������⵽��ά�벢�һ�ȡ����4���ǵ㣬�Ż�����ά���ı߽���
+        if (points.size() >= 4) {
+            for (int i = 0; i < points.size(); i++) {
+                cv::line(frameWithLines, points[i], points[(i + 1) % points.size()], cv::Scalar(0, 255, 0), 3); // ����ɫ�߿�
+            }
+        }
+
+        // ����δ�ܳɹ�������ά���Ҽ��⵽�˱߿���ִ�� checkDamagedQRCode
+//        if (points.size() >= 4 && decodedText.empty()) {
+//            checkDamagedQRCode();
+//            return;
+//        }
+
+        // �����ɹ����ı����ϴβ�ͬ
         if (!decodedText.empty() && decodedText != lastDecodedText) {
             lastDecodedText = decodedText;
 
             QStringList parts = QString::fromStdString(decodedText).split("-");
-            if (parts.size() == 3||parts.size() == 4) {
-                if(parts.size() == 4){
-                     MainWindow::sharedSerial->sendData("2");
+            if (parts.size() == 3 || parts.size() == 4) {
+                if (parts.size() == 4) {
+                    MainWindow::sharedSerial->sendData("2");
                 }
                 int row = ui.tableWidget->rowCount();
                 ui.tableWidget->insertRow(row);
@@ -181,20 +192,18 @@ void QRCode::processFrame(const cv::Mat &frame)
                 ui.tableWidget->setItem(row, 4, item4.release());
             }
             if (MainWindow::sharedSerial) {
-                // ȷ���ַ�������ȷ�Ƚ�
-                if (parts[2] == QStringLiteral("云庭市")) {
-                    MainWindow::sharedSerial->sendDataPacket("1");
+                // ȷ��Ҫ���͵�����
+                if (parts[1] == QStringLiteral("云庭市")) {
+                    MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
                     qDebug() << "Data sent to serial port: 1";
-                }else if(parts[2] == QStringLiteral("碧水市")) {
-                    MainWindow::sharedSerial->sendDataPacket("2");
+                } else if (parts[1] == QStringLiteral("碧水市")) {
+                    MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
                     qDebug() << "Data sent to serial port: 2";
-                }else  {
-                    MainWindow::sharedSerial->sendDataPacket("3");
+                } else if(parts[1] == QStringLiteral("白云市")) {
+                    MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
                     qDebug() << "Data sent to serial port: 3";
-
                 }
             }
-
         }
 
         ui.tableWidget->scrollToBottom();
@@ -218,15 +227,16 @@ void QRCode::processFrame(const cv::Mat &frame)
         qDebug() << "Unknown exception caught in processFrame";
     }
 }
+
 void QRCode::on_exButton_Pressed()
 {
-//    btn = std::make_unique<BtnEffect>(ui.exButton);
-//    btn->zoom1();
+    btn = std::make_unique<BtnEffect>(ui.exButton);
+    btn->zoom1();
 
 }
 void QRCode::on_exButton_Release()
 {
-
+    MainWindow::sharedSerial->sendDataPacket("exit",MySerial::PacketType::Command);
     exitMode();
 }
 
@@ -245,7 +255,7 @@ void QRCode::on_slowButton_released()
                 loop.exec();
                 btn.reset();
             }
-       MainWindow::sharedSerial->sendDataPacket("flow");
+       MainWindow::sharedSerial->sendDataPacket("slow",MySerial::PacketType::Command);
 }
 void QRCode::on_fastButton_pressed()
 {
@@ -262,7 +272,7 @@ void QRCode::on_fastButton_released()
                 loop.exec();
                 btn.reset();
             }
-       MainWindow::sharedSerial->sendDataPacket("fast");
+       MainWindow::sharedSerial->sendDataPacket("fast",MySerial::PacketType::Command);
 }
 
 

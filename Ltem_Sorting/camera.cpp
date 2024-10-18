@@ -17,10 +17,10 @@ void ExternalCamera::start()
 {
     videocapture.open(0);
     if (videocapture.isOpened()) {
-        videocapture.set(cv::CAP_PROP_FRAME_WIDTH, 320);
+        videocapture.set(cv::CAP_PROP_FRAME_WIDTH,  320);
         videocapture.set(cv::CAP_PROP_FRAME_HEIGHT, 240);
         fpsTimer->start();
-        timer->start(33);  // Լ 30 FPS
+        timer->start(11);  // Լ 30 FPS
     }
 }
 

@@ -69,32 +69,41 @@
     {
             on_open_clicked();  // �ӹ��������е���˽�з���
     }
-    void MySerial::sendDataPacket(const QString &dataToSend)
+    void MySerial::sendDataPacket(const QString &dataToSend, PacketType packetType)
     {
-        // ��ʼ�������ݰ���ʹ���ض���ʽ 0x3a 0x3b <data> 0x3c
-        QByteArray packet;
-        packet.append(0x3a);  // ��ͷ 0x3a
-        packet.append(0x3b);  // ��ͷ 0x3b
-
-        // �� QString ת��Ϊ UTF-8 ������ QByteArray �����ӵ����ݰ���
-        QByteArray data = dataToSend.toUtf8();
-        packet.append(data);
-
-        packet.append(0x3c);  // ��β 0x3c
-
         // �������ݰ�
+        QByteArray packet;
+
+        // ���Ӱ�ͷ
+        packet.append(0x3a);  // �̶���ͷ 0x3a
+
+        // ���Ӱ�ͷ�ڶ����ֽڣ�������������������
+        if (packetType == PacketType::Command) {
+            packet.append(0x3b);  // ������ͷ 0x3d
+        } else {
+            packet.append(0x3d);  // ���ݰ�ͷ 0x3b
+        }
+
+        // Ϊ�ַ�����������ǰ׺
+
+
+
+        packet.append(dataToSend);
+
+
+        packet.append(0x3c);
+
+
         qint64 bytesWritten = serialPort_->write(packet);
 
-        // ��������
+
         if (bytesWritten == -1) {
             QMessageBox::warning(this, "Warning", "Failed to send data packet: " + serialPort_->errorString());
         } else {
             qDebug() << "Successfully sent data packet, bytes written:" << bytesWritten;
-            // �����ڵ��Դ�����ʾ���͵�����
             qDebug() << "Packet sent: " << packet.toHex();
         }
     }
-
     void MySerial::recvSLOTS()
     {
         qDebug() << "recvSLOTS 被调用 ";
@@ -194,3 +203,40 @@
             qDebug() << "No data to send.";
         }
     }
+
+void MySerial::on_senddata_2_clicked()
+{
+    btn = std::make_unique<BtnEffect>(ui->senddata_2);
+    btn->zoom1();
+    if (btn) {
+        QEventLoop loop;
+        connect(btn->getAnimation(), &QPropertyAnimation::finished, &loop, &QEventLoop::quit);
+        btn->zoom2();
+        loop.exec();
+        btn.reset();
+    }
+
+    // ���鴮���Ƿ�����
+    if (!serialPort_->isOpen()) {
+        qDebug() << "Serial port not open.";
+        return;
+    }
+
+    // ��ȡ QPlainTextEdit �������ı�
+    QPlainTextEdit* plainText = ui->plainTextEdit;
+    QString dataToSend = plainText->toPlainText().trimmed();  // ȥ����β�ո�
+
+    // ��ʾ���͵�ʱ��������
+    ui->textEdit->append(QString("%1 发送数据包: %2")
+                         .arg(mytimer.getCurrentTime())
+                         .arg(dataToSend));
+
+    // ͨ�� sendData ������������
+    if (!dataToSend.isEmpty()) {  // ֻ�зǿ��ı��ŷ���
+        sendDataPacket(dataToSend,PacketType::Data);
+    } else {
+        qDebug() << "No data to send.";
+    }
+}
+
+
