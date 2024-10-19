@@ -1,6 +1,6 @@
 #include "qrcode.h"
 #include <QDebug>
-
+#include <QMutex>
 QRCode::QRCode(QWidget *parent)
     : QMainWindow(parent), camera(nullptr), lastDecodedText("")
 {
@@ -83,6 +83,12 @@ void QRCode::exitMode()
         camera.reset();
     }
 
+    if (isProcessing) {
+        // �ȴ���ǰ�߳�����
+        QThread::currentThread()->wait();
+        isProcessing = false;
+    }
+
     signalConnected = false;
 
     if (parentWidget()) {
@@ -140,92 +146,91 @@ void QRCode::checkDamagedQRCode()
 }
 void QRCode::processFrame(const cv::Mat &frame)
 {
-    try {
-        cv::Mat frameWithLines = frame.clone();
+    // ֱ�ӻ�ȡ֡�Ŀ�¡
+    cv::Mat frameWithLines = frame.clone();
 
-        // ����ʹ�ý��������Ⲣ������ά��
-        std::string decodedText = this->qrDecoder.detectAndDecode(frameWithLines, this->points);
+    if (!isProcessing) { // �����Ƿ����ڴ���
+            isProcessing = true; // ���ñ�־Ϊ true
 
-        // �������⵽��ά�벢�һ�ȡ����4���ǵ㣬�Ż�����ά���ı߽���
-        if (points.size() >= 4) {
-            for (int i = 0; i < points.size(); i++) {
-                cv::line(frameWithLines, points[i], points[(i + 1) % points.size()], cv::Scalar(0, 255, 0), 3); // ����ɫ�߿�
-            }
-        }
+            MyWork *decoderThread = new MyWork(frameWithLines);
+            // �� decoderThread ����Ϊ QRCode ���Ӷ������Ա��Զ������ڴ�
+            decoderThread->setParent(this);
 
-        // ����δ�ܳɹ�������ά���Ҽ��⵽�˱߿���ִ�� checkDamagedQRCode
-//        if (points.size() >= 4 && decodedText.empty()) {
-//            checkDamagedQRCode();
-//            return;
-//        }
+            // �����ź�����
+            connect(decoderThread, &MyWork::decoded, this, &QRCode::handleDecoded);
+            connect(decoderThread, &QThread::finished, this, [this]() {
+                isProcessing = false; // ���ô���״̬Ϊ false
+            });
 
-        // �����ɹ����ı����ϴβ�ͬ
-        if (!decodedText.empty() && decodedText != lastDecodedText) {
-            lastDecodedText = decodedText;
-
-            QStringList parts = QString::fromStdString(decodedText).split("-");
-            if (parts.size() == 3 || parts.size() == 4) {
-                if (parts.size() == 4) {
-                    MainWindow::sharedSerial->sendData("2");
-                }
-                int row = ui.tableWidget->rowCount();
-                ui.tableWidget->insertRow(row);
-
-                std::unique_ptr<QTableWidgetItem> item0(new QTableWidgetItem(QString::number(currentIndex++)));
-                item0->setTextAlignment(Qt::AlignCenter);
-                ui.tableWidget->setItem(row, 0, item0.release());
-
-                std::unique_ptr<QTableWidgetItem> item1(new QTableWidgetItem(parts[0]));
-                item1->setTextAlignment(Qt::AlignCenter);
-                ui.tableWidget->setItem(row, 1, item1.release());
-
-                std::unique_ptr<QTableWidgetItem> item2(new QTableWidgetItem(parts[1]));
-                item2->setTextAlignment(Qt::AlignCenter);
-                ui.tableWidget->setItem(row, 2, item2.release());
-
-                std::unique_ptr<QTableWidgetItem> item3(new QTableWidgetItem(parts[2]));
-                item3->setTextAlignment(Qt::AlignCenter);
-                ui.tableWidget->setItem(row, 3, item3.release());
-
-                std::unique_ptr<QTableWidgetItem> item4(new QTableWidgetItem(mytimer.getCurrentTime()));
-                item4->setTextAlignment(Qt::AlignCenter);
-                ui.tableWidget->setItem(row, 4, item4.release());
-            }
-            if (MainWindow::sharedSerial) {
-                // ȷ��Ҫ���͵�����
-                if (parts[1] == QStringLiteral("云庭市")) {
-                    MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
-                    qDebug() << "Data sent to serial port: 1";
-                } else if (parts[1] == QStringLiteral("碧水市")) {
-                    MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
-                    qDebug() << "Data sent to serial port: 2";
-                } else if(parts[1] == QStringLiteral("白云市")) {
-                    MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
-                    qDebug() << "Data sent to serial port: 3";
-                }
-            }
-        }
-
-        ui.tableWidget->scrollToBottom();
-        QPixmap qpixmap = camera->Mat2QImage(frameWithLines);
-        camera->getCameraLabel()->setPixmap(qpixmap);
-    } catch (const std::exception &e) {
-        QFile logFile("application.log");
-        if (logFile.open(QIODevice::Append | QIODevice::Text)) {
-            QTextStream out(&logFile);
-            out << mytimer.getCurrentTime() << " - Exception caught in processFrame: " << e.what() << "\n";
-        }
-        logFile.close();
-        qDebug() << "Exception caught in processFrame: " << e.what();
-    } catch (...) {
-        QFile logFile("application.log");
-        if (logFile.open(QIODevice::Append | QIODevice::Text)) {
-            QTextStream out(&logFile);
-            out << mytimer.getCurrentTime() << " - Unknown exception caught in processFrame\n";
-        }
-        logFile.close();
-        qDebug() << "Unknown exception caught in processFrame";
+            // �����߳�
+            decoderThread->start();
     }
+    // ���� points ���������������� 4 ���㣬�����ƶ�ά���߿�
+    QMutex mutex;
+    mutex.lock();
+    if (lastPoints.size() >= 4) {
+        for (size_t i = 0; i < lastPoints.size(); i++) {
+            cv::line(frameWithLines, lastPoints[i], lastPoints[(i + 1) % lastPoints.size()], cv::Scalar(0, 255, 0), 3);
+        }
+        lastPoints.clear();  // ����lastPoints
+    }
+    mutex.unlock();
+
+    // ��ʾ��������֡
+    QPixmap qpixmap = camera->Mat2QImage(frameWithLines);
+    camera->getCameraLabel()->setPixmap(qpixmap);
+}
+
+
+void QRCode::handleDecoded(const std::string &decodedText, const std::vector<cv::Point> &points)
+{
+
+    static int i;
+    i++;
+    qDebug()<<i;
+  this->lastPoints = points;
+    if (decodedText == lastDecodedText) {
+
+        return;
+    }
+
+
+
+    this->lastDecodedText = decodedText;
+
+    // ���к�������
+    if (!decodedText.empty()) {
+        // �ָ��ַ���
+        QStringList parts = QString::fromStdString(lastDecodedText).split("-");
+        if (parts.size() == 3 || parts.size() == 4) {
+            if (parts.size() == 4) {
+                MainWindow::sharedSerial->sendData("delicate");
+            }
+
+            // ���� UI
+            int row = ui.tableWidget->rowCount();
+            ui.tableWidget->insertRow(row);
+            ui.tableWidget->setItem(row, 0, new QTableWidgetItem(QString::number(currentIndex++)));
+            ui.tableWidget->setItem(row, 1, new QTableWidgetItem(parts[0]));
+            ui.tableWidget->setItem(row, 2, new QTableWidgetItem(parts[1]));
+            ui.tableWidget->setItem(row, 3, new QTableWidgetItem(parts[2]));
+            ui.tableWidget->setItem(row, 4, new QTableWidgetItem(mytimer.getCurrentTime()));
+        }
+
+        // ���ݲ�ͬ��������������
+        if (MainWindow::sharedSerial) {
+            if (parts[1] == QStringLiteral("云庭市")) {
+                MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
+            } else if (parts[1] == QStringLiteral("碧水市")) {
+                MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
+            } else if (parts[1] == QStringLiteral("白云市")) {
+                MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
+            }
+        }
+    }
+
+    // ����������һ��
+    ui.tableWidget->scrollToBottom();
 }
 
 void QRCode::on_exButton_Pressed()

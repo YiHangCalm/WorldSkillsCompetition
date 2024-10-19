@@ -8,7 +8,7 @@
 #include <QKeyEvent>
 #include "mainwindow.h"
 #include"hsvajustdialog.h"
-#include "workthread.h"
+
 #include "mytimer.h"
 class ScanColor : public QMainWindow , public Mode
 {

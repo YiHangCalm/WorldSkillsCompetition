@@ -15,14 +15,22 @@ ExternalCamera::ExternalCamera(QWidget *parent)
 
 void ExternalCamera::start()
 {
+    // ��������ͷ
     videocapture.open(0);
     if (videocapture.isOpened()) {
-        videocapture.set(cv::CAP_PROP_FRAME_WIDTH,  320);
+        // ��������ͷ�ֱ���
+        videocapture.set(cv::CAP_PROP_FRAME_WIDTH, 320);
         videocapture.set(cv::CAP_PROP_FRAME_HEIGHT, 240);
+
+        // ��������֡��
+        videocapture.set(cv::CAP_PROP_FPS, 90); // ��������֡��Ϊ90
+
+        // ������ʱ��
         fpsTimer->start();
-        timer->start(11);  // Լ 30 FPS
+        timer->start(11);  // ÿ11��������һ�Σ��ӽ�90 FPS
     }
 }
+
 
 void ExternalCamera::stop()
 {
@@ -99,3 +107,5 @@ QLabel* ExternalCamera::getCameraLabel()
 {
     return cameraLabel;
 }
+
+

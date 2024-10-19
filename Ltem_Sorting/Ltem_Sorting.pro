@@ -23,9 +23,9 @@ SOURCES += \
     modemanager.cpp \
     myserial.cpp \
     mytimer.cpp \
+    mywork.cpp \
     qrcode.cpp \
-    scancolor.cpp \
-    workthread.cpp
+    scancolor.cpp
 
 HEADERS += \
     btneffect.h \
@@ -36,9 +36,9 @@ HEADERS += \
     modemanager.h \
     myserial.h \
     mytimer.h \
+    mywork.h \
     qrcode.h \
-    scancolor.h \
-    workthread.h
+    scancolor.h
 
 FORMS += \
     mainwindow.ui

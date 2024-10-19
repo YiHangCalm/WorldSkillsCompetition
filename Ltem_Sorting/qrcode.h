@@ -11,6 +11,7 @@
     #include "btneffect.h"
     #include <QKeyEvent>
     #include "mainwindow.h"  // ��Ҫ���� MainWindow ͷ�ļ�
+    #include "mywork.h"
     class QRCode : public QMainWindow, public Mode
     {
         Q_OBJECT
@@ -22,7 +23,7 @@
         void exitMode() override;
         void show() override;
         void  keyPressEvent(QKeyEvent *event);
-
+        void handleDecoded(const std::string &decodedText, const std::vector<cv::Point> &points);
         void checkDamagedQRCode();
     private slots:
         void on_exButton_Release();
@@ -45,6 +46,8 @@
         std::unique_ptr<ExternalCamera> camera;
         cv::QRCodeDetector qrDecoder;
         std::string lastDecodedText;
+        std::vector<cv::Point> lastPoints; // �洢����һ�ν����ĵ�
+        bool isProcessing = false; // ��־����ʾ��ǰ�Ƿ��ڴ������߳�
         std::vector<cv::Point> points;
         bool signalConnected = false;
         int currentIndex = 1;

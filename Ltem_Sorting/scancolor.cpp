@@ -93,11 +93,11 @@ void ScanColor::processFrame(const cv::Mat &frame)
     // Define color ranges for detection
     std::vector<std::pair<cv::Scalar, cv::Scalar>> colorRanges = {
         {cv::Scalar(0, 100, 100), cv::Scalar(10, 255, 255)},  // Bright Red
-        {cv::Scalar(20, 100, 100), cv::Scalar(30, 255, 255)}, // Blue
+        {cv::Scalar(110, 170, 50), cv::Scalar(130, 230, 200)},//blue
         {cv::Scalar(35, 100, 100), cv::Scalar(85, 255, 255)}, // Green
-        {cv::Scalar(100, 150, 0), cv::Scalar(140, 255, 255)}, // Yellow
+
     };
-    std::vector<std::string> colorNames = {"Red", "Blue", "Green", "Yellow"};
+    std::vector<std::string> colorNames = {"Red", "Blue", "Green"};
 
     cv::Mat result = frame.clone();
     bool colorDetected = false;
@@ -124,8 +124,7 @@ void ScanColor::processFrame(const cv::Mat &frame)
             }
 
             // Display contour area
-            QString areaString = QString("Contour area: %1").arg(area);
-            ui.informationEdit->append(areaString);
+
 
             // Draw bounding box
             cv::Rect boundingRect = cv::boundingRect(contour);
@@ -159,9 +158,7 @@ void ScanColor::processFrame(const cv::Mat &frame)
                 } else if (color == "Green") {
                     MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
                     qDebug() << "Data sent to serial port: 3 (Green)";
-                } else if (color == "Yellow") {
-                    MainWindow::sharedSerial->sendDataPacket("4", MySerial::PacketType::Data);
-                    qDebug() << "Data sent to serial port: 4 (Yellow)";
+
                 } else {
                     qDebug() << "Unrecognized color: " << color;
                 }

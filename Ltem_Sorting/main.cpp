@@ -8,6 +8,8 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    qRegisterMetaType<std::string>("std::string");
+    qRegisterMetaType<std::vector<cv::Point>>("std::vector<cv::Point>");
     MainWindow w;
 
     // ȫ���쳣��������
