@@ -15,6 +15,7 @@
 #include <QPropertyAnimation>
 #include <QGraphicsOpacityEffect>
 #include <QSequentialAnimationGroup>
+#include <QDateTime>
     class QRCode : public QMainWindow, public Mode
     {
         Q_OBJECT
@@ -79,6 +80,7 @@
         int currentIndex = 1;
          ModeType currentMode;
          ModeType_variable variable;
+         QDateTime lastProcessedTime;
     };
 
     #endif // QR_CODE_MODE_H

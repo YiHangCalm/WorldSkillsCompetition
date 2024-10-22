@@ -1,6 +1,7 @@
 #include "qrcode.h"
 #include <QDebug>
 #include <QMutex>
+
 QRCode::QRCode(QWidget *parent)
     : QMainWindow(parent), camera(nullptr), lastDecodedText(""),currentMode(classification),variable(yunting)
 {
@@ -49,6 +50,7 @@ QRCode::QRCode(QWidget *parent)
     connect(ui.exButton, &QPushButton::pressed, this, &QRCode::on_exButton_Release);
     //connect(ui.slowButton, &QPushButton::released, this, &QRCode::on_slowButton_Pressed);
     //connect(ui.fastButton, &QPushButton::released, this, &QRCode::on_fastButton_Pressed);
+     lastProcessedTime = QDateTime::currentDateTime();
 }
 
 void QRCode::enterMode(QWidget *parentWidget)
@@ -213,78 +215,81 @@ void QRCode::processFrame(const cv::Mat &frame)
 
 void QRCode::handleDecoded(const std::string &decodedText, const std::vector<cv::Point> &points)
 {
-
     static int i;
-    i++;
-    qDebug()<<i;
-  this->lastPoints = points;
-    if (decodedText == lastDecodedText) {
+      i++;
+      qDebug() << i;
+      this->lastPoints = points;
 
-        return;
-    }
+      // �����Ƿ����ϴν���������ͬ
+
+      // ����ʱ�������С��1�룬��������
+      QDateTime currentTime = QDateTime::currentDateTime();
+      if (lastProcessedTime.msecsTo(currentTime) < 1000) {
+          return;  // ����С��1�룬���Դ˴�ɨ��
+      }
 
 
+      lastProcessedTime = currentTime;  // �����ϴδ���ʱ��
 
-    this->lastDecodedText = decodedText;
+      // ���к�������
+      if (!decodedText.empty()) {
+          // �ָ��ַ���
+          QStringList parts = QString::fromStdString(decodedText).split("-");
+          if (parts.size() == 3 || parts.size() == 4) {
+              if (parts.size() == 4) {
+                  MainWindow::sharedSerial->sendData("delicate");
+              }
 
-    // ���к�������
-    if (!decodedText.empty()) {
-        // �ָ��ַ���
-        QStringList parts = QString::fromStdString(lastDecodedText).split("-");
-        if (parts.size() == 3 || parts.size() == 4) {
-            if (parts.size() == 4) {
-                MainWindow::sharedSerial->sendData("delicate");
-            }
+              // ���� UI
+              int row = ui.tableWidget->rowCount();
+              ui.tableWidget->insertRow(row);
+              ui.tableWidget->setItem(row, 0, new QTableWidgetItem(QString::number(currentIndex++)));
+              ui.tableWidget->setItem(row, 1, new QTableWidgetItem(parts[0]));
+              if(parts[1] == QStringLiteral("白云市"))
+                  ui.tableWidget->setItem(row, 2, new QTableWidgetItem(QStringLiteral("青山市")));
+              else
+                  ui.tableWidget->setItem(row, 2, new QTableWidgetItem(parts[1]));
 
-            // ���� UI
-            int row = ui.tableWidget->rowCount();
-            ui.tableWidget->insertRow(row);
-            ui.tableWidget->setItem(row, 0, new QTableWidgetItem(QString::number(currentIndex++)));
-            ui.tableWidget->setItem(row, 1, new QTableWidgetItem(parts[0]));
-            ui.tableWidget->setItem(row, 2, new QTableWidgetItem(parts[1]));
-            ui.tableWidget->setItem(row, 3, new QTableWidgetItem(parts[2]));
-            ui.tableWidget->setItem(row, 4, new QTableWidgetItem(mytimer.getCurrentTime()));
-        }
+              ui.tableWidget->setItem(row, 3, new QTableWidgetItem(parts[2]));
+              ui.tableWidget->setItem(row, 4, new QTableWidgetItem(mytimer.getCurrentTime()));
+          }
 
-        // ���ݲ�ͬ��������������
-        if (MainWindow::sharedSerial) {
-            if(currentMode==classification){
-                if (parts[1] == QStringLiteral("云庭市")) {
-                    MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
-                } else if (parts[1] == QStringLiteral("碧水市")) {
-                    MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
-                } else if (parts[1] == QStringLiteral("青山市")) {
-                    MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
-                }
-            }else{
-                if (variable == yunting) {
-                           // ֻ���� "��ͥ��" �ŷ������ݰ�
-                           if (parts[1] == QStringLiteral("云庭市")) {
-                               MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
-                           }else{
-                                MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
-                           }
-                } else if (variable == bishui) {
-                           // ֻ���� "��ˮ��" �ŷ������ݰ�
-                           if (parts[1] == QStringLiteral("碧水市")) {
-                               MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
-                           }else{
-                               MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
-                          }
-                 } else if (variable == baiyun) {
-                           // ֻ���� "������" �ŷ������ݰ�
-                           if (parts[1] == QStringLiteral("青山市")) {//青山市
-                               MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
-                            }else{
-                               MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
-                          }
-                }
-            }
-        }
-    }
+          // ���ݲ�ͬ��������������
+          if (MainWindow::sharedSerial) {
+              if (currentMode == classification) {
+                  if (parts[1] == QStringLiteral("云庭市")) {
+                      MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
+                  } else if (parts[1] == QStringLiteral("碧水市")) {
+                      MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
+                  } else if (parts[1] == QStringLiteral("白云市")) {
+                      MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
+                  }
+              } else {
+                  if (variable == yunting) {
+                      if (parts[1] == QStringLiteral("云庭市")) {
+                          MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
+                      } else {
+                          MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
+                      }
+                  } else if (variable == bishui) {
+                      if (parts[1] == QStringLiteral("碧水市")) {
+                          MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
+                      } else {
+                          MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
+                      }
+                  } else if (variable == baiyun) {
+                      if (parts[1] == QStringLiteral("白云市")) {
+                          MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
+                      } else {
+                          MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
+                      }
+                  }
+              }
+          }
+      }
 
-    // ����������һ��
-    ui.tableWidget->scrollToBottom();
+      // �Զ������������ײ�
+      ui.tableWidget->scrollToBottom();
 }
 
 void QRCode::on_exButton_Pressed()

@@ -8,7 +8,7 @@
 #include <QKeyEvent>
 #include "mainwindow.h"
 #include"hsvajustdialog.h"
-
+#include <QDateTime>
 #include "mytimer.h"
 class ScanColor : public QMainWindow , public Mode
 {
@@ -76,7 +76,7 @@ private:
     std::string previousDetectedColor ;
     ModeType currentMode;
     ModeType_variable variable;
-
+    QDateTime lastColorDetectedTime;  // ����Ϊ��Ա����
 };
 
 #endif // SCAN_COLOR_H

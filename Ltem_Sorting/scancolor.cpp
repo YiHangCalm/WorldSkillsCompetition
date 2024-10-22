@@ -12,6 +12,8 @@ ScanColor::ScanColor(QWidget *parent)
      ui.HSV->setStyleSheet("border: 2px solid white;");  // ʹ����ʽ�����ñ߿���ɫ������
      ui.informationEdit->setReadOnly(true) ;
      ui.widget->hide();
+
+     lastColorDetectedTime = QDateTime::currentDateTime();  // �ڹ��캯���г�ʼ��
 }
 
 ScanColor::~ScanColor()
@@ -62,136 +64,128 @@ void ScanColor::show()
     QMainWindow::show();
 }
 
-void ScanColor::processFrame(const cv::Mat &frame)
-{
-    // ��������֡�Ƿ�Ϊ��
+void ScanColor::processFrame(const cv::Mat &frame) {
     if (frame.empty()) {
         qDebug() << "Input frame is empty!";
         return; // ���ڷ���
     }
-
-    // Convert the frame to HSV
     cv::Mat frameHSV;
-    cv::cvtColor(frame, frameHSV, cv::COLOR_BGR2HSV);
+       cv::cvtColor(frame, frameHSV, cv::COLOR_BGR2HSV);
 
-    // Display the HSV image
-    QPixmap hsvPixmap = camera->Mat2QImage(frameHSV);
-    if (ui.HSV) {
-        ui.HSV->setPixmap(hsvPixmap);
-    }
+       // Display the HSV image
+       QPixmap hsvPixmap = camera->Mat2QImage(frameHSV);
+       if (ui.HSV) {
+           ui.HSV->setPixmap(hsvPixmap);
+       }
+       cv::Mat binaryImage;
+          cv::inRange(frameHSV, cv::Scalar(iLowH, iLowS, iLowV), cv::Scalar(iHighH, iHighS, iHighV), binaryImage);
 
-    // Create a binary image based on the HSV thresholds
-    cv::Mat binaryImage;
-    cv::inRange(frameHSV, cv::Scalar(iLowH, iLowS, iLowV), cv::Scalar(iHighH, iHighS, iHighV), binaryImage);
+          // Display the binary image
+          QPixmap binaryPixmap = camera->Mat2QImage(binaryImage);
+          if (ui.bin) {
+              ui.bin->setPixmap(binaryPixmap);
+          }
 
-    // Display the binary image
-    QPixmap binaryPixmap = camera->Mat2QImage(binaryImage);
-    if (ui.bin) {
-        ui.bin->setPixmap(binaryPixmap);
-    }
+          // Define color ranges for detection
+          std::vector<std::pair<cv::Scalar, cv::Scalar>> colorRanges = {
+              {cv::Scalar(125, 114, 71), cv::Scalar(180, 255, 255)}, // Upper Red
+              {cv::Scalar(90, 170, 132), cv::Scalar(112, 255, 255)}, // Blue
+              {cv::Scalar(35, 100, 100), cv::Scalar(85, 255, 255)},  // Green
+          };
 
-    // Define color ranges for detection
-    std::vector<std::pair<cv::Scalar, cv::Scalar>> colorRanges = {
-      {cv::Scalar(125, 114, 71), cv::Scalar(180, 255, 255)} , // Upper Red
-        {cv::Scalar(90, 170, 132), cv::Scalar(112, 255, 255)}, // Green
-          {cv::Scalar(35, 100, 100), cv::Scalar(85, 255, 255)}, // Green
+          std::vector<std::string> colorNames = {"Red", "Blue", "Green"};
 
+             cv::Mat result = frame.clone();
+             bool colorDetected = false;
+             std::string detectedColor;
 
-    };
-    std::vector<std::string> colorNames = {"Red", "Blue", "Green"};
+             // Get the current time
+             QDateTime currentTime = QDateTime::currentDateTime();
 
-    cv::Mat result = frame.clone();
-    bool colorDetected = false;
-    std::string detectedColor;
+             // Iterate through each color range to detect colors
+             for (size_t i = 0; i < colorRanges.size(); ++i) {
+                 cv::Mat mask;
+                 cv::inRange(frameHSV, colorRanges[i].first, colorRanges[i].second, mask); // Filter color
 
+                 // Dilate to strengthen the detected color region
+                 cv::Mat dilatedMask;
+                 cv::dilate(mask, dilatedMask, cv::Mat(), cv::Point(-1, -1), 2);
 
-    // Iterate through each color range to detect colors
-    for (size_t i = 0; i < colorRanges.size(); ++i) {
-        cv::Mat mask;
-        cv::inRange(frameHSV, colorRanges[i].first, colorRanges[i].second, mask);  // Filter color
+                 // Find contours
+                 std::vector<std::vector<cv::Point>> contours;
+                 cv::findContours(dilatedMask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
-        // Dilate to strengthen the detected color region
-        cv::Mat dilatedMask;
-        cv::dilate(mask, dilatedMask, cv::Mat(), cv::Point(-1, -1), 2);
+                 for (const auto &contour : contours) {
+                     double area = cv::contourArea(contour);
+                     if (area < 13000) {
+                         continue;  // Ignore small areas
+                     }
+                     // Draw bounding box
+                             cv::Rect boundingRect = cv::boundingRect(contour);
+                             cv::rectangle(result, boundingRect, cv::Scalar(0, 255, 0), 2);
 
-        // Find contours
-        std::vector<std::vector<cv::Point>> contours;
-        cv::findContours(dilatedMask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+                             detectedColor = colorNames[i];
+                             cv::putText(result, detectedColor,
+                                         cv::Point(boundingRect.x, boundingRect.y - 10), // Text position
+                                         cv::FONT_HERSHEY_SIMPLEX, // Font type
+                                         0.7, // Font scale
+                                         cv::Scalar(255, 255, 255), 1); // Text color
 
-        for (const auto &contour : contours) {
-            double area = cv::contourArea(contour);
-            if (area < 13000) {
-                continue;  // Ignore small areas
-            }
+                             // Check if the detected color's time interval is more than 1 second
+                             if (lastColorDetectedTime.msecsTo(currentTime) < 2000) {
+                                 continue; // Ignore if less than 1 second has passed
+                             }
 
-            // Display contour area
+                             // Log detected color with time
+                             QString color = QString::fromStdString(detectedColor);
+                             if (color == "Red") {
+                                 ui.informationEdit->append(QString("%1  检测到红色包裹")
+                                                            .arg(mytimer.getCurrentTime()));
+                             } else if (color == "Blue") {
+                                 ui.informationEdit->append(QString("%1  检测到蓝色包裹")
+                                                            .arg(mytimer.getCurrentTime()));
+                             } else if (color == "Green") {
+                                 ui.informationEdit->append(QString("%1  检测到绿色包裹")
+                                                            .arg(mytimer.getCurrentTime()));
+                             }
 
+                             // Send data based on mode and color
+                             if (currentMode == classification) {
+                                 if (color == "Red") {
+                                     MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
+                                 } else if (color == "Blue") {
+                                     MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
+                                 } else if (color == "Green") {
+                                     MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
+                                 }
+                             } else {
+                                 if (variable == R) {
+                                     if (color == "Red")
+                                         MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
+                                     else
+                                         MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
+                                 } else if (variable == B) {
+                                     if (color == "Blue")
+                                         MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
+                                     else
+                                         MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
+                                 } else if (variable == G) {
+                                     if (color == "Green")
+                                         MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
+                                     else
+                                         MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
+                                 }
+                             }
 
-            // Draw bounding box
-            cv::Rect boundingRect = cv::boundingRect(contour);
-            cv::rectangle(result, boundingRect, cv::Scalar(0, 255, 0), 2);
+                             // Update the last detected color time
+                             lastColorDetectedTime = currentTime;
+                         }
+                     }
 
-            detectedColor = colorNames[i];
-            cv::putText(result, detectedColor,
-                          cv::Point(boundingRect.x, boundingRect.y - 10), // Text position
-                          cv::FONT_HERSHEY_SIMPLEX, // Font type
-                          0.7, // Font scale
-                          cv::Scalar(255, 255, 255), 1); // Text color
-
-            // Check if the detected color is the same as the previous one
-            if (detectedColor == previousDetectedColor) {
-                colorDetected = true; // If the same color is detected, just mark it
-                break; // Break out of the contour loop
-            } else {
-               QString color = QString::fromStdString(detectedColor);
-                if(color=="Red")                ui.informationEdit->append(QString("%1 检测到：红色包裹")
-                                                                           .arg(mytimer.getCurrentTime()));
-                if(color=="Blue")                ui.informationEdit->append(QString("%1 检测到：蓝色包裹")
-                                                                            .arg(mytimer.getCurrentTime()));
-                if(color=="Green")                ui.informationEdit->append(QString("%1 检测到：绿色包裹")
-                                                                            .arg(mytimer.getCurrentTime()));
-
-
-
-                if(currentMode==classification){
-                if (color == "Red") {
-                    MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
-                    qDebug() << "Data sent to serial port: 1 (Red)";
-                } else if (color == "Blue") {
-                    MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
-                    qDebug() << "Data sent to serial port: 2 (Blue)";
-                } else if (color == "Green") {
-                    MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
-                    qDebug() << "Data sent to serial port: 3 (Green)";
-
-                } else {
-                    qDebug() << "Unrecognized color: " << color;
-                }
-                }else{
-                    if(variable==R){
-                        if(color=="Red")MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
-                          else MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
-                    }else if(variable==B){
-                        if(color=="Blue")MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
-                          else MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
-                    }else if(variable==G){
-                        if(color=="Green")MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
-                          else MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
-                    }
-
-                }
-            }
-
-            colorDetected = true;
-            previousDetectedColor = detectedColor;
-        }
-    }
-
-    // Display the result image
-    QPixmap qpixmap = camera->Mat2QImage(result);
-    camera->getCameraLabel()->setPixmap(qpixmap);
-}
-
+                     // Display the result image
+                     QPixmap qpixmap = camera->Mat2QImage(result);
+                     camera->getCameraLabel()->setPixmap(qpixmap);
+  }
 void ScanColor::on_adjust_released()
 {
     if (btn) {
