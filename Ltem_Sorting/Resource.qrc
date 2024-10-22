@@ -17,5 +17,12 @@
         <file>Rese/Serial.png</file>
         <file>Rese/HSV.png</file>
         <file>Rese/senddata.png</file>
+        <file>Rese/back.png</file>
+        <file>Rese/baiyun.png</file>
+        <file>Rese/bishui.png</file>
+        <file>Rese/yunting.png</file>
+        <file>Rese/blue.png</file>
+        <file>Rese/green.png</file>
+        <file>Rese/red.png</file>
     </qresource>
 </RCC>

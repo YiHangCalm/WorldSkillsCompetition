@@ -22,8 +22,23 @@ public:
     void exitMode();
     void show();
     void keyPressEvent(QKeyEvent *event);
+ void adjustButtonHeight(QPushButton *selectedButton);
+    enum ModeType {
+           classification,
+           appoint
+           // �������ڴ˴���������ģʽ
+       };
+    enum ModeType_variable {
+          R,
+          G,
+           B,
+           // �������ڴ˴���������ģʽ
+    };
 
-
+    void animateWidget2Show();
+    void animateWidget2Hide();
+    void resetAllButtons();
+    void sendData(const std::string &colorCode, const std::string &color);
 private slots:
     void on_exitBtn_clicked();
 
@@ -31,6 +46,16 @@ private slots:
 
     void on_adjust_released();
 
+
+    void on_red_clicked();
+
+    void on_green_clicked();
+
+    void on_blue_clicked();
+
+    void on_appoint_clicked();
+
+    void on_sorte_clicked();
 
 private:
     int iLowH =10;
@@ -48,6 +73,10 @@ private:
     std::unique_ptr<HSVAdjustDialog>adjustDialog;
     bool signalConnected = false;  // Flag for signal connection
     mytimer mytimer;
+    std::string previousDetectedColor ;
+    ModeType currentMode;
+    ModeType_variable variable;
+
 };
 
 #endif // SCAN_COLOR_H

@@ -44,6 +44,47 @@ QPushButton#adjust {
     height: 80px; 
 	font-size: 16px;
 	border: none;
+}
+QPushButton#sorte {
+    border-image: url(:/new/btn/Rese/fast.png);
+    
+     width: 203;  
+    height: 80px; 
+	font-size: 16px;
+	border: none;
+}
+
+QPushButton#appoint {
+    border-image: url(:/new/btn/Rese/slow.png);
+    
+     width: 203;  
+    height: 80px; 
+	font-size: 16px;
+	border: none;
+}
+QPushButton#red {
+    border-image: url(:/new/btn/Rese/red.png);
+    
+     width: 203;  
+    height: 80px; 
+	font-size: 16px;
+	border: none;
+}
+QPushButton#blue {
+    border-image: url(:/new/btn/Rese/blue.png);
+    
+     width: 203;  
+    height: 80px; 
+	font-size: 16px;
+	border: none;
+}
+QPushButton#green {
+    border-image: url(:/new/btn/Rese/green.png);
+    
+     width: 203;  
+    height: 80px; 
+	font-size: 16px;
+	border: none;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -51,28 +92,10 @@ QPushButton#adjust {
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>330</y>
-      <width>361</width>
-      <height>251</height>
+      <y>270</y>
+      <width>341</width>
+      <height>301</height>
      </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="exButton">
-    <property name="geometry">
-     <rect>
-      <x>790</x>
-      <y>480</y>
-      <width>181</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>-1</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="HSV">
@@ -101,23 +124,113 @@ QPushButton#adjust {
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="adjust">
+   <widget class="QWidget" name="widget_2" native="true">
     <property name="geometry">
      <rect>
-      <x>790</x>
-      <y>380</y>
-      <width>181</width>
-      <height>71</height>
+      <x>820</x>
+      <y>260</y>
+      <width>201</width>
+      <height>301</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <pointsize>-1</pointsize>
-     </font>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QPushButton" name="appoint">
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="sorte">
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QPushButton" name="adjust">
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QPushButton" name="exButton">
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>270</y>
+      <width>221</width>
+      <height>270</height>
+     </rect>
     </property>
-    <property name="text">
-     <string/>
-    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="blue">
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="red">
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="green">
+       <property name="font">
+        <font>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

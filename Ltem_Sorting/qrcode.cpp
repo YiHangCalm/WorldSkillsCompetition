@@ -2,12 +2,13 @@
 #include <QDebug>
 #include <QMutex>
 QRCode::QRCode(QWidget *parent)
-    : QMainWindow(parent), camera(nullptr), lastDecodedText("")
+    : QMainWindow(parent), camera(nullptr), lastDecodedText(""),currentMode(classification),variable(yunting)
 {
     ui.setupUi(this);
     this->showFullScreen();
     ui.tableWidget->verticalHeader()->setVisible(false); // ������ͷ�����ţ�
-
+    ui.tableWidget->setFixedHeight(560);
+     ui.widget2->hide();
     ui.tableWidget->setStyleSheet(
         "QTableWidget {"
         "   background-color: #1E3A8A;"
@@ -40,11 +41,11 @@ QRCode::QRCode(QWidget *parent)
      tableFont.setPointSize(18); // ����������С
     ui.tableWidget->setFont(tableFont);
 
-    ui.tableWidget->setColumnWidth(0, 120);
-    ui.tableWidget->setColumnWidth(1, 130);
-    ui.tableWidget->setColumnWidth(2, 130);
-    ui.tableWidget->setColumnWidth(3, 160);
-    ui.tableWidget->setColumnWidth(4, 170);
+    ui.tableWidget->setColumnWidth(0, 110);
+    ui.tableWidget->setColumnWidth(1, 140);
+    ui.tableWidget->setColumnWidth(2, 140);
+    ui.tableWidget->setColumnWidth(3, 170);
+    ui.tableWidget->setColumnWidth(4, 160);
     connect(ui.exButton, &QPushButton::pressed, this, &QRCode::on_exButton_Release);
     //connect(ui.slowButton, &QPushButton::released, this, &QRCode::on_slowButton_Pressed);
     //connect(ui.fastButton, &QPushButton::released, this, &QRCode::on_fastButton_Pressed);
@@ -86,6 +87,7 @@ void QRCode::exitMode()
     if (isProcessing) {
         // �ȴ���ǰ�߳�����
         QThread::currentThread()->wait();
+
         isProcessing = false;
     }
 
@@ -143,6 +145,33 @@ void QRCode::checkDamagedQRCode()
     ui.tableWidget->setItem(row, 4, item4.release());
 
     qDebug() << "Damaged QR code detected.";
+}
+void QRCode::resetAllButtons() {
+    // ��ȡ������ť��ָ��
+    QPushButton *buttons[3] = {ui.yunting, ui.baiyun, ui.bishui};
+
+    // ����ÿ����ť�������߶ȸ�ԭΪĬ�ϵ� 60
+    for (int i = 0; i < 3; i++) {
+        buttons[i]->setFixedHeight(60);
+    }
+}
+
+void QRCode::adjustButtonHeight(QPushButton *selectedButton) {
+    // ���尴ť�ĸ߶�
+    const int selectedHeight = 90;
+    const int defaultHeight = 60;
+
+    // ���谴ť��ָ���ֱ��� ui.yuntingButton, ui.baiyunButton, ui.bishuiButton
+    QPushButton *buttons[] = {ui.yunting, ui.baiyun, ui.bishui};
+
+    // ������ť���飬���ø߶�
+    for (QPushButton *button : buttons) {
+        if (button == selectedButton) {
+            button->setFixedHeight(selectedHeight); // ���ô��밴ť�ĸ߶�
+        } else {
+            button->setFixedHeight(defaultHeight);  // ������ť�ĸ߶�
+        }
+    }
 }
 void QRCode::processFrame(const cv::Mat &frame)
 {
@@ -219,12 +248,37 @@ void QRCode::handleDecoded(const std::string &decodedText, const std::vector<cv:
 
         // ���ݲ�ͬ��������������
         if (MainWindow::sharedSerial) {
-            if (parts[1] == QStringLiteral("云庭市")) {
-                MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
-            } else if (parts[1] == QStringLiteral("碧水市")) {
-                MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
-            } else if (parts[1] == QStringLiteral("白云市")) {
-                MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
+            if(currentMode==classification){
+                if (parts[1] == QStringLiteral("云庭市")) {
+                    MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
+                } else if (parts[1] == QStringLiteral("碧水市")) {
+                    MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
+                } else if (parts[1] == QStringLiteral("青山市")) {
+                    MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
+                }
+            }else{
+                if (variable == yunting) {
+                           // ֻ���� "��ͥ��" �ŷ������ݰ�
+                           if (parts[1] == QStringLiteral("云庭市")) {
+                               MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
+                           }else{
+                                MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
+                           }
+                } else if (variable == bishui) {
+                           // ֻ���� "��ˮ��" �ŷ������ݰ�
+                           if (parts[1] == QStringLiteral("碧水市")) {
+                               MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
+                           }else{
+                               MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
+                          }
+                 } else if (variable == baiyun) {
+                           // ֻ���� "������" �ŷ������ݰ�
+                           if (parts[1] == QStringLiteral("青山市")) {//青山市
+                               MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
+                            }else{
+                               MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
+                          }
+                }
             }
         }
     }
@@ -260,7 +314,12 @@ void QRCode::on_slowButton_released()
                 loop.exec();
                 btn.reset();
             }
-       MainWindow::sharedSerial->sendDataPacket("slow",MySerial::PacketType::Command);
+       MainWindow::sharedSerial->sendDataPacket("sorte",MySerial::PacketType::Command);
+       this->currentMode=classification;
+       for(int i=0;i<130;i++)
+        ui.tableWidget->setFixedHeight(430+i);
+       animateWidget2Hide();
+
 }
 void QRCode::on_fastButton_pressed()
 {
@@ -277,8 +336,101 @@ void QRCode::on_fastButton_released()
                 loop.exec();
                 btn.reset();
             }
-       MainWindow::sharedSerial->sendDataPacket("fast",MySerial::PacketType::Command);
+       MainWindow::sharedSerial->sendDataPacket("appoint",MySerial::PacketType::Command);
+       this->currentMode=appoint;
+       this->variable=yunting;
+       for(int i=0;i<130;i++)
+        ui.tableWidget->setFixedHeight(560-i);
+       animateWidget2Show();
+       resetAllButtons();
+
 }
 
 
 
+
+void QRCode::on_yunting_clicked()
+{
+    btn = std::make_unique<BtnEffect>(ui.yunting);
+    btn->zoom1();
+    if (btn) {
+                QEventLoop loop;
+                connect(btn->getAnimation(), &QPropertyAnimation::finished, &loop, &QEventLoop::quit);
+                btn->zoom2();
+                loop.exec();
+                btn.reset();
+            }
+   this->variable=yunting;
+    MainWindow::sharedSerial->sendDataPacket("yunting",MySerial::PacketType::Command);
+    adjustButtonHeight(ui.yunting);
+}
+
+
+void QRCode::on_bishui_clicked()
+{
+    btn = std::make_unique<BtnEffect>(ui.bishui);
+    btn->zoom1();
+    if(btn){
+        QEventLoop loop;
+        connect(btn->getAnimation(),&QPropertyAnimation::finished,&loop,&QEventLoop::quit);
+        btn->zoom2();
+        loop.exec();
+        btn.reset();
+    }
+    this->variable=bishui;
+     MainWindow::sharedSerial->sendDataPacket("bishui",MySerial::PacketType::Command);
+    adjustButtonHeight(ui.bishui);
+}
+void  QRCode::on_baiyun_clicked(){
+
+    btn = std::make_unique<BtnEffect>(ui.baiyun);
+    btn->zoom1();
+    if(btn){
+        QEventLoop loop;
+        connect(btn->getAnimation(),&QPropertyAnimation::finished,&loop,&QEventLoop::quit);
+        btn->zoom2();
+        loop.exec();
+        btn.reset();
+    }
+    this->variable=baiyun;
+     MainWindow::sharedSerial->sendDataPacket("baiyun",MySerial::PacketType::Command);//青山市
+    adjustButtonHeight(ui.baiyun);
+
+}
+
+void QRCode::animateWidget2Show() {
+    // ���� widget2 ��͸��Ч��
+    QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(ui.widget2);
+    ui.widget2->setGraphicsEffect(opacityEffect);
+
+    // �������붯��
+    QPropertyAnimation *fadeIn = new QPropertyAnimation(opacityEffect, "opacity");
+    fadeIn->setDuration(500);  // 500 ����
+    fadeIn->setStartValue(0);  // ��͸����ʼ
+    fadeIn->setEndValue(1);    // ��Ϊ��ȫ�ɼ�
+
+    // ��ʾ widget2
+    ui.widget2->show();
+
+    // �������붯��
+    fadeIn->start();
+}
+void QRCode::animateWidget2Hide() {
+    // ���� widget2 ��͸��Ч��
+    QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(ui.widget2);
+    ui.widget2->setGraphicsEffect(opacityEffect);
+
+    // ������������
+    QPropertyAnimation *fadeOut = new QPropertyAnimation(opacityEffect, "opacity");
+    fadeOut->setDuration(500);  // 500 ����
+    fadeOut->setStartValue(1);
+    fadeOut->setEndValue(0);
+
+    // ���Ӷ��������ź������� widget2
+    connect(fadeOut, &QPropertyAnimation::finished, this, [this]() {
+        ui.widget2->hide();
+    });
+
+    // ������������
+    fadeOut->start();
+}

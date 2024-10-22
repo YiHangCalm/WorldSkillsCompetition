@@ -6,6 +6,10 @@
 #include <opencv2/opencv.hpp>
 #include <QString>
 #include "qrcode.h"  // ���� QRCode �Ķ���
+#include <zbar.h>  // ȷ������ ZBar ��ͷ�ļ�
+#include <opencv2/opencv.hpp> // ���� OpenCV ͷ�ļ�
+
+using namespace zbar; // ʹ�� ZBar �����ռ�
 class MyWork : public QThread
 {
     Q_OBJECT

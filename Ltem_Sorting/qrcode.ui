@@ -52,6 +52,30 @@ QPushButton#fastButton {
     height: 80px; 
 	font-size: 16px;
 	border: none;
+}
+QPushButton#baiyun {
+    border-image: url(:/new/btn/Rese/baiyun.png);
+    
+     width: 203;  
+    height: 60px; 
+	font-size: 16px;
+	border: none;
+}
+QPushButton#bishui {
+    border-image: url(:/new/btn/Rese/bishui.png);
+    
+     width: 203;  
+    height: 60px; 
+	font-size: 16px;
+	border: none;
+}
+QPushButton#yunting {
+    border-image: url(:/new/btn/Rese/yunting.png);
+    
+     width: 130;  
+    height: 60px; 
+	font-size: 16px;
+	border: none;
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -60,8 +84,8 @@ QPushButton#fastButton {
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>711</width>
-      <height>573</height>
+      <width>712</width>
+      <height>431</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -200,6 +224,57 @@ QPushButton#fastButton {
         </size>
        </property>
       </spacer>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="widget2" native="true">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>450</y>
+      <width>661</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="yunting">
+       <property name="font">
+        <font>
+         <family>文泉驿点阵正黑</family>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="bishui">
+       <property name="font">
+        <font>
+         <family>文泉驿点阵正黑</family>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="baiyun">
+       <property name="font">
+        <font>
+         <family>文泉驿点阵正黑</family>
+         <pointsize>-1</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>

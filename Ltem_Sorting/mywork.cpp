@@ -4,18 +4,35 @@ MyWork::MyWork(const cv::Mat &frame, QObject *parent)
     : QThread(parent), frame(frame) {}
 
 void MyWork::run() {
-    std::vector<cv::Point> points;
-    std::string decodedText = qrDecoder.detectAndDecode(frame, points);
+    // ����ɫͼ��ת��Ϊ�Ҷ�ͼ��
+    cv::Mat grayFrame;
+    cv::cvtColor(frame, grayFrame, cv::COLOR_BGR2GRAY);  // תΪ�Ҷ�ͼ��
 
-    if (!decodedText.empty()) {
-        emit decoded(decodedText, points);
-        // �������źź󣬸���ʵ�����������Ƿ�ɾ��
+
+    ImageScanner scanner;
+    scanner.set_config(ZBAR_NONE, ZBAR_CFG_ENABLE, 1);  // ����������������
+    Image zbarImage(grayFrame.cols, grayFrame.rows, "Y800", grayFrame.data, grayFrame.cols * grayFrame.rows);
+
+    // ��ʼɨ��ͼ��
+    int result = scanner.scan(zbarImage);
+
+    if (result > 0) {
+        // ����ÿ�����ţ���ά��/���룩
+        for (Image::SymbolIterator symbol = zbarImage.symbol_begin(); symbol != zbarImage.symbol_end(); ++symbol) {
+            std::string decodedText = symbol->get_data();  // ��ȡ�����ı�
+            std::vector<cv::Point> points;
+
+            // ��ȡ���ŵ��ĸ�����
+            for (int i = 0; i < symbol->get_location_size(); i++) {
+                points.emplace_back(symbol->get_location_x(i), symbol->get_location_y(i));
+            }
+
+            emit decoded(decodedText, points);  // ���ͽ����ź�
+        }
     } else {
-        // ��¼����ʧ����Ϣ����ѡ��
+        // ����ʧ��ʱ�Ĵ�����������־������
         // qDebug() << "Decode failed";
-        this->deleteLater();
     }
 
-    // ȷ�����ڴ˴����� deleteLater()
-    // this->deleteLater();
+    // �ڴ˴�����Ҫʹ�� deleteLater()��QThread���Զ���������������
 }

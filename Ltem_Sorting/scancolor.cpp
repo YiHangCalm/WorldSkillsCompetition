@@ -11,7 +11,7 @@ ScanColor::ScanColor(QWidget *parent)
      ui.bin->setStyleSheet("border: 2px solid white;");  // ʹ����ʽ�����ñ߿���ɫ������
      ui.HSV->setStyleSheet("border: 2px solid white;");  // ʹ����ʽ�����ñ߿���ɫ������
      ui.informationEdit->setReadOnly(true) ;
-
+     ui.widget->hide();
 }
 
 ScanColor::~ScanColor()
@@ -92,9 +92,10 @@ void ScanColor::processFrame(const cv::Mat &frame)
 
     // Define color ranges for detection
     std::vector<std::pair<cv::Scalar, cv::Scalar>> colorRanges = {
-        {cv::Scalar(0, 100, 100), cv::Scalar(10, 255, 255)},  // Bright Red
-        {cv::Scalar(110, 170, 50), cv::Scalar(130, 230, 200)},//blue
-        {cv::Scalar(35, 100, 100), cv::Scalar(85, 255, 255)}, // Green
+      {cv::Scalar(125, 114, 71), cv::Scalar(180, 255, 255)} , // Upper Red
+        {cv::Scalar(90, 170, 132), cv::Scalar(112, 255, 255)}, // Green
+          {cv::Scalar(35, 100, 100), cv::Scalar(85, 255, 255)}, // Green
+
 
     };
     std::vector<std::string> colorNames = {"Red", "Blue", "Green"};
@@ -102,7 +103,7 @@ void ScanColor::processFrame(const cv::Mat &frame)
     cv::Mat result = frame.clone();
     bool colorDetected = false;
     std::string detectedColor;
-    static std::string previousDetectedColor = ""; // Store previously detected color
+
 
     // Iterate through each color range to detect colors
     for (size_t i = 0; i < colorRanges.size(); ++i) {
@@ -142,13 +143,17 @@ void ScanColor::processFrame(const cv::Mat &frame)
                 colorDetected = true; // If the same color is detected, just mark it
                 break; // Break out of the contour loop
             } else {
-                QString color = QString::fromStdString(detectedColor); // �� `detectedColor` תΪ QString
+               QString color = QString::fromStdString(detectedColor);
+                if(color=="Red")                ui.informationEdit->append(QString("%1 检测到：红色包裹")
+                                                                           .arg(mytimer.getCurrentTime()));
+                if(color=="Blue")                ui.informationEdit->append(QString("%1 检测到：蓝色包裹")
+                                                                            .arg(mytimer.getCurrentTime()));
+                if(color=="Green")                ui.informationEdit->append(QString("%1 检测到：绿色包裹")
+                                                                            .arg(mytimer.getCurrentTime()));
 
-                ui.informationEdit->append(QString("%1 Color detected: %2")
-                                           .arg(mytimer.getCurrentTime())
-                                           .arg(color));
 
-                // ������ɫ���Ͳ�ͬ�����ݰ�
+
+                if(currentMode==classification){
                 if (color == "Red") {
                     MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
                     qDebug() << "Data sent to serial port: 1 (Red)";
@@ -161,6 +166,19 @@ void ScanColor::processFrame(const cv::Mat &frame)
 
                 } else {
                     qDebug() << "Unrecognized color: " << color;
+                }
+                }else{
+                    if(variable==R){
+                        if(color=="Red")MainWindow::sharedSerial->sendDataPacket("1", MySerial::PacketType::Data);
+                          else MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
+                    }else if(variable==B){
+                        if(color=="Blue")MainWindow::sharedSerial->sendDataPacket("2", MySerial::PacketType::Data);
+                          else MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
+                    }else if(variable==G){
+                        if(color=="Green")MainWindow::sharedSerial->sendDataPacket("3", MySerial::PacketType::Data);
+                          else MainWindow::sharedSerial->sendDataPacket("0", MySerial::PacketType::Data);
+                    }
+
                 }
             }
 
@@ -209,6 +227,7 @@ void ScanColor::keyPressEvent(QKeyEvent *event)
 void ScanColor::on_exitBtn_clicked()
 {
      MainWindow::sharedSerial->sendDataPacket("exit",MySerial::PacketType::Command);
+     previousDetectedColor="";
     exitMode();
 }
 
@@ -219,4 +238,155 @@ void ScanColor::on_adjust_pressed()
 }
 
 
+void ScanColor::adjustButtonHeight(QPushButton *selectedButton) {
+    // ���尴ť�ĸ߶�
+    const int selectedHeight = 90;
+    const int defaultHeight = 60;
 
+    // ���谴ť��ָ���ֱ��� ui.yuntingButton, ui.baiyunButton, ui.bishuiButton
+    QPushButton *buttons[] = {ui.red, ui.blue, ui.green};
+
+    // ������ť���飬���ø߶�
+    for (QPushButton *button : buttons) {
+        if (button == selectedButton) {
+            button->setFixedHeight(selectedHeight); // ���ô��밴ť�ĸ߶�
+        } else {
+            button->setFixedHeight(defaultHeight);  // ������ť�ĸ߶�
+        }
+    }
+}
+
+void ScanColor::on_red_clicked()
+{
+    btn = std::make_unique<BtnEffect>(ui.red);
+    btn->zoom1();
+    if(btn){
+        QEventLoop loop;
+        connect(btn->getAnimation(),&QPropertyAnimation::finished,&loop,&QEventLoop::quit);
+        btn->zoom2();
+        loop.exec();
+        btn.reset();
+    }
+    this->variable=R;
+      MainWindow::sharedSerial->sendDataPacket("red",MySerial::PacketType::Command);
+      previousDetectedColor="";
+    adjustButtonHeight(ui.red);
+}
+
+
+void ScanColor::on_green_clicked()
+{
+    btn = std::make_unique<BtnEffect>(ui.green);
+    btn->zoom1();
+    if(btn){
+        QEventLoop loop;
+        connect(btn->getAnimation(),&QPropertyAnimation::finished,&loop,&QEventLoop::quit);
+        btn->zoom2();
+        loop.exec();
+        btn.reset();
+    }
+    this->variable=G;
+     MainWindow::sharedSerial->sendDataPacket("green",MySerial::PacketType::Command);
+     previousDetectedColor="";
+    adjustButtonHeight(ui.green);
+}
+
+
+void ScanColor::on_blue_clicked()
+{
+    btn = std::make_unique<BtnEffect>(ui.blue);
+    btn->zoom1();
+    if(btn){
+        QEventLoop loop;
+        connect(btn->getAnimation(),&QPropertyAnimation::finished,&loop,&QEventLoop::quit);
+        btn->zoom2();
+        loop.exec();
+        btn.reset();
+    }
+    this->variable=B;
+     MainWindow::sharedSerial->sendDataPacket("blue",MySerial::PacketType::Command);
+     previousDetectedColor="";
+
+     adjustButtonHeight(ui.blue);
+}
+
+
+void ScanColor::on_appoint_clicked()
+{
+    btn = std::make_unique<BtnEffect>(ui.appoint);
+    btn->zoom1();
+    if(btn){
+        QEventLoop loop;
+        connect(btn->getAnimation(),&QPropertyAnimation::finished,&loop,&QEventLoop::quit);
+        btn->zoom2();
+        loop.exec();
+        btn.reset();
+    }
+     MainWindow::sharedSerial->sendDataPacket("sorte",MySerial::PacketType::Command);
+    previousDetectedColor="";
+     this->variable=R;
+      this->currentMode=classification;
+    animateWidget2Hide();
+}
+
+
+void ScanColor::on_sorte_clicked()
+{
+    btn = std::make_unique<BtnEffect>(ui.sorte);
+    btn->zoom1();
+    if(btn){
+        QEventLoop loop;
+        connect(btn->getAnimation(),&QPropertyAnimation::finished,&loop,&QEventLoop::quit);
+        btn->zoom2();
+        loop.exec();
+        btn.reset();
+    }
+     MainWindow::sharedSerial->sendDataPacket("appoint",MySerial::PacketType::Command);
+     this->currentMode=appoint;
+     animateWidget2Show();
+}
+void ScanColor::animateWidget2Show() {
+    // ���� widget2 ��͸��Ч��
+    QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(ui.widget);
+    ui.widget->setGraphicsEffect(opacityEffect);
+
+    // �������붯��
+    QPropertyAnimation *fadeIn = new QPropertyAnimation(opacityEffect, "opacity");
+    fadeIn->setDuration(500);  // 500 ����
+    fadeIn->setStartValue(0);  // ��͸����ʼ
+    fadeIn->setEndValue(1);    // ��Ϊ��ȫ�ɼ�
+
+    // ��ʾ widget2
+    ui.widget->show();
+
+    // �������붯��
+    fadeIn->start();
+}
+void ScanColor::animateWidget2Hide() {
+    // ���� widget2 ��͸��Ч��
+    QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect(ui.widget);
+    ui.widget->setGraphicsEffect(opacityEffect);
+
+    // ������������
+    QPropertyAnimation *fadeOut = new QPropertyAnimation(opacityEffect, "opacity");
+    fadeOut->setDuration(500);  // 500 ����
+    fadeOut->setStartValue(1);
+    fadeOut->setEndValue(0);
+
+    // ���Ӷ��������ź������� widget2
+    connect(fadeOut, &QPropertyAnimation::finished, this, [this]() {
+        ui.widget->hide();
+    });
+
+    // ������������
+    fadeOut->start();
+}
+void ScanColor::resetAllButtons() {
+    // ��ȡ������ť��ָ��
+    QPushButton *buttons[3] = {ui.red, ui.blue, ui.green};
+
+    // ����ÿ����ť�������߶ȸ�ԭΪĬ�ϵ� 60
+    for (int i = 0; i < 3; i++) {
+        buttons[i]->setFixedHeight(60);
+    }
+}
