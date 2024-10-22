@@ -10,3 +10,49 @@
 > must be greater than
 >     '0.0' is 0
 
+13:58:02 - Exception caught in processFrame: OpenCV(4.10.0-dev) /home/yihang/opencv/modules/objdetect/src/qrcode.cpp:2951: error: (-2:Unspecified error) in function 'virtual std::string cv::ImplContour::decode(cv::InputArray, cv::InputArray, cv::OutputArray) const'
+> Invalid QR code source points (expected: 'contourArea(src_points) > 0.0'), where
+>     'contourArea(src_points)' is 0
+> must be greater than
+>     '0.0' is 0
+
+00:18:06 - Exception caught in processFrame: OpenCV(4.10.0-dev) /home/yihang/opencv/modules/objdetect/src/qrcode.cpp:2951: error: (-2:Unspecified error) in function 'virtual std::string cv::ImplContour::decode(cv::InputArray, cv::InputArray, cv::OutputArray) const'
+> Invalid QR code source points (expected: 'contourArea(src_points) > 0.0'), where
+>     'contourArea(src_points)' is 0
+> must be greater than
+>     '0.0' is 0
+
+00:18:18 - Exception caught in processFrame: OpenCV(4.10.0-dev) /home/yihang/opencv/modules/objdetect/src/qrcode.cpp:2951: error: (-2:Unspecified error) in function 'virtual std::string cv::ImplContour::decode(cv::InputArray, cv::InputArray, cv::OutputArray) const'
+> Invalid QR code source points (expected: 'contourArea(src_points) > 0.0'), where
+>     'contourArea(src_points)' is 0
+> must be greater than
+>     '0.0' is 0
+
+17:55:36 - Exception caught in processFrame: OpenCV(4.10.0-dev) /home/yihang/opencv/modules/objdetect/src/qrcode.cpp:2951: error: (-2:Unspecified error) in function 'virtual std::string cv::ImplContour::decode(cv::InputArray, cv::InputArray, cv::OutputArray) const'
+> Invalid QR code source points (expected: 'contourArea(src_points) > 0.0'), where
+>     'contourArea(src_points)' is 0
+> must be greater than
+>     '0.0' is 0
+
+21:48:34 - Exception caught in processFrame: OpenCV(4.10.0-dev) /home/yihang/opencv/modules/objdetect/src/qrcode.cpp:2951: error: (-2:Unspecified error) in function 'virtual std::string cv::ImplContour::decode(cv::InputArray, cv::InputArray, cv::OutputArray) const'
+> Invalid QR code source points (expected: 'contourArea(src_points) > 0.0'), where
+>     'contourArea(src_points)' is 0
+> must be greater than
+>     '0.0' is 0
+
+21:48:34 - Exception caught in processFrame: OpenCV(4.10.0-dev) /home/yihang/opencv/modules/objdetect/src/qrcode.cpp:2951: error: (-2:Unspecified error) in function 'virtual std::string cv::ImplContour::decode(cv::InputArray, cv::InputArray, cv::OutputArray) const'
+> Invalid QR code source points (expected: 'contourArea(src_points) > 0.0'), where
+>     'contourArea(src_points)' is 0
+> must be greater than
+>     '0.0' is 0
+
+21:59:44 - Exception caught in processFrame: OpenCV(4.10.0-dev) /home/yihang/opencv/modules/objdetect/src/qrcode.cpp:2951: error: (-2:Unspecified error) in function 'virtual std::string cv::ImplContour::decode(cv::InputArray, cv::InputArray, cv::OutputArray) const'
+> Invalid QR code source points (expected: 'contourArea(src_points) > 0.0'), where
+>     'contourArea(src_points)' is 0
+> must be greater than
+>     '0.0' is 0
+
+11:46:46 - Exception caught in processFrame: OpenCV(4.10.0-dev) /home/yihang/opencv/modules/imgproc/src/convhull.cpp:143: error: (-215:Assertion failed) total >= 0 && (depth == CV_32F || depth == CV_32S) in function 'convexHull'
+
+11:47:07 - Exception caught in processFrame: OpenCV(4.10.0-dev) /home/yihang/opencv/modules/imgproc/src/convhull.cpp:143: error: (-215:Assertion failed) total >= 0 && (depth == CV_32F || depth == CV_32S) in function 'convexHull'
+

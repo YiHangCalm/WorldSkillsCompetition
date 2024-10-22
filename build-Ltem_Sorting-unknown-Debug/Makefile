@@ -17,7 +17,7 @@ CXX           = clang++
 DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SERIALPORT_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++1z -Wall -Wextra -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../Ltem_Sorting -I. -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang
+INCPATH       = -I../Ltem_Sorting -I. -I/usr/include/zbar -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang
 QMAKE         = /usr/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -40,7 +40,7 @@ DISTNAME      = Ltem_Sorting1.0.0
 DISTDIR = /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/.tmp/Ltem_Sorting1.0.0
 LINK          = clang++
 LFLAGS        = -ccc-gcc-name g++
-LIBS          = $(SUBLIBS) -L/usr/local/lib -lopencv_core -lopencv_imgcodecs -lopencv_videoio -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -lopencv_features2d -lopencv_dnn -lopencv_video /usr/lib/aarch64-linux-gnu/libQt5Widgets.so /usr/lib/aarch64-linux-gnu/libQt5Gui.so /usr/lib/aarch64-linux-gnu/libQt5SerialPort.so /usr/lib/aarch64-linux-gnu/libQt5Core.so -lGL -lpthread   
+LIBS          = $(SUBLIBS) -lzbar -L/usr/local/lib -lopencv_core -lopencv_imgcodecs -lopencv_videoio -lopencv_highgui -lopencv_imgproc -lopencv_objdetect -lopencv_features2d -lopencv_dnn -lopencv_video /usr/lib/aarch64-linux-gnu/libQt5Widgets.so /usr/lib/aarch64-linux-gnu/libQt5Gui.so /usr/lib/aarch64-linux-gnu/libQt5SerialPort.so /usr/lib/aarch64-linux-gnu/libQt5Core.so -lGL -lpthread   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -54,37 +54,45 @@ OBJECTS_DIR   = ./
 
 SOURCES       = ../Ltem_Sorting/btneffect.cpp \
 		../Ltem_Sorting/camera.cpp \
+		../Ltem_Sorting/hsvajustdialog.cpp \
 		../Ltem_Sorting/main.cpp \
 		../Ltem_Sorting/mainwindow.cpp \
 		../Ltem_Sorting/mode.cpp \
 		../Ltem_Sorting/modemanager.cpp \
 		../Ltem_Sorting/myserial.cpp \
 		../Ltem_Sorting/mytimer.cpp \
+		../Ltem_Sorting/mywork.cpp \
 		../Ltem_Sorting/qrcode.cpp \
 		../Ltem_Sorting/scancolor.cpp qrc_Resource.cpp \
 		qrc_qmake_qmake_qm_files.cpp \
 		moc_camera.cpp \
+		moc_hsvajustdialog.cpp \
 		moc_mainwindow.cpp \
 		moc_myserial.cpp \
 		moc_mytimer.cpp \
+		moc_mywork.cpp \
 		moc_qrcode.cpp \
 		moc_scancolor.cpp
 OBJECTS       = btneffect.o \
 		camera.o \
+		hsvajustdialog.o \
 		main.o \
 		mainwindow.o \
 		mode.o \
 		modemanager.o \
 		myserial.o \
 		mytimer.o \
+		mywork.o \
 		qrcode.o \
 		scancolor.o \
 		qrc_Resource.o \
 		qrc_qmake_qmake_qm_files.o \
 		moc_camera.o \
+		moc_hsvajustdialog.o \
 		moc_mainwindow.o \
 		moc_myserial.o \
 		moc_mytimer.o \
+		moc_mywork.o \
 		moc_qrcode.o \
 		moc_scancolor.o
 DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -117,6 +125,8 @@ DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_input_support_private.pri \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_kms_support_private.pri \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_linuxaccessibility_support_private.pri \
+		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_multimedia.pri \
+		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_multimediawidgets.pri \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri \
@@ -174,20 +184,24 @@ DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../Ltem_Sorting/Ltem_Sorting.pro ../Ltem_Sorting/btneffect.h \
 		../Ltem_Sorting/camera.h \
+		../Ltem_Sorting/hsvajustdialog.h \
 		../Ltem_Sorting/mainwindow.h \
 		../Ltem_Sorting/mode.h \
 		../Ltem_Sorting/modemanager.h \
 		../Ltem_Sorting/myserial.h \
 		../Ltem_Sorting/mytimer.h \
+		../Ltem_Sorting/mywork.h \
 		../Ltem_Sorting/qrcode.h \
 		../Ltem_Sorting/scancolor.h ../Ltem_Sorting/btneffect.cpp \
 		../Ltem_Sorting/camera.cpp \
+		../Ltem_Sorting/hsvajustdialog.cpp \
 		../Ltem_Sorting/main.cpp \
 		../Ltem_Sorting/mainwindow.cpp \
 		../Ltem_Sorting/mode.cpp \
 		../Ltem_Sorting/modemanager.cpp \
 		../Ltem_Sorting/myserial.cpp \
 		../Ltem_Sorting/mytimer.cpp \
+		../Ltem_Sorting/mywork.cpp \
 		../Ltem_Sorting/qrcode.cpp \
 		../Ltem_Sorting/scancolor.cpp
 QMAKE_TARGET  = Ltem_Sorting
@@ -198,7 +212,7 @@ TARGET        = Ltem_Sorting
 first: all
 ####### Build rules
 
-Ltem_Sorting: ui_myserial.h ui_qrcode.h ui_scancolor.h ui_mainwindow.h $(OBJECTS)  
+Ltem_Sorting: ui_hsvajustdialog.h ui_myserial.h ui_qrcode.h ui_scancolor.h ui_mainwindow.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../Ltem_Sorting/Ltem_Sorting.pro /usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang/qmake.conf /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -231,6 +245,8 @@ Makefile: ../Ltem_Sorting/Ltem_Sorting.pro /usr/lib/aarch64-linux-gnu/qt5/mkspec
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_input_support_private.pri \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_kms_support_private.pri \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_linuxaccessibility_support_private.pri \
+		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_multimedia.pri \
+		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_multimediawidgets.pri \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri \
@@ -320,6 +336,8 @@ Makefile: ../Ltem_Sorting/Ltem_Sorting.pro /usr/lib/aarch64-linux-gnu/qt5/mkspec
 /usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_input_support_private.pri:
 /usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_kms_support_private.pri:
 /usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_linuxaccessibility_support_private.pri:
+/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_multimedia.pri:
+/usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_multimediawidgets.pri:
 /usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_network.pri:
 /usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_network_private.pri:
 /usr/lib/aarch64-linux-gnu/qt5/mkspecs/modules/qt_lib_opengl.pri:
@@ -395,9 +413,9 @@ distdir: FORCE
 	$(COPY_FILE) --parents ../Ltem_Sorting/Ltem_Sorting_zh_CN.ts $(DISTDIR)/
 	$(COPY_FILE) --parents ../Ltem_Sorting/Resource.qrc qmake_qmake_qm_files.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Ltem_Sorting/btneffect.h ../Ltem_Sorting/camera.h ../Ltem_Sorting/mainwindow.h ../Ltem_Sorting/mode.h ../Ltem_Sorting/modemanager.h ../Ltem_Sorting/myserial.h ../Ltem_Sorting/mytimer.h ../Ltem_Sorting/qrcode.h ../Ltem_Sorting/scancolor.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../Ltem_Sorting/btneffect.cpp ../Ltem_Sorting/camera.cpp ../Ltem_Sorting/main.cpp ../Ltem_Sorting/mainwindow.cpp ../Ltem_Sorting/mode.cpp ../Ltem_Sorting/modemanager.cpp ../Ltem_Sorting/myserial.cpp ../Ltem_Sorting/mytimer.cpp ../Ltem_Sorting/qrcode.cpp ../Ltem_Sorting/scancolor.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../Ltem_Sorting/myserial.ui ../Ltem_Sorting/qrcode.ui ../Ltem_Sorting/scancolor.ui ../Ltem_Sorting/mainwindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../Ltem_Sorting/btneffect.h ../Ltem_Sorting/camera.h ../Ltem_Sorting/hsvajustdialog.h ../Ltem_Sorting/mainwindow.h ../Ltem_Sorting/mode.h ../Ltem_Sorting/modemanager.h ../Ltem_Sorting/myserial.h ../Ltem_Sorting/mytimer.h ../Ltem_Sorting/mywork.h ../Ltem_Sorting/qrcode.h ../Ltem_Sorting/scancolor.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../Ltem_Sorting/btneffect.cpp ../Ltem_Sorting/camera.cpp ../Ltem_Sorting/hsvajustdialog.cpp ../Ltem_Sorting/main.cpp ../Ltem_Sorting/mainwindow.cpp ../Ltem_Sorting/mode.cpp ../Ltem_Sorting/modemanager.cpp ../Ltem_Sorting/myserial.cpp ../Ltem_Sorting/mytimer.cpp ../Ltem_Sorting/mywork.cpp ../Ltem_Sorting/qrcode.cpp ../Ltem_Sorting/scancolor.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../Ltem_Sorting/hsvajustdialog.ui ../Ltem_Sorting/myserial.ui ../Ltem_Sorting/qrcode.ui ../Ltem_Sorting/scancolor.ui ../Ltem_Sorting/mainwindow.ui $(DISTDIR)/
 	$(COPY_FILE) --parents ../Ltem_Sorting/Ltem_Sorting_zh_CN.ts $(DISTDIR)/
 
 
@@ -433,14 +451,27 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_Resource.cpp qrc_qmake_qmake_qm_files.cpp
 qrc_Resource.cpp: ../Ltem_Sorting/Resource.qrc \
 		/usr/lib/qt5/bin/rcc \
-		../Ltem_Sorting/Rese/exmode.png \
 		../Ltem_Sorting/Rese/jiancebtn.png \
-		../Ltem_Sorting/Rese/slow.png \
-		../Ltem_Sorting/Rese/exbtn.png \
-		../Ltem_Sorting/Rese/clrbtn.png \
-		../Ltem_Sorting/Rese/backgud.png \
-		../Ltem_Sorting/Rese/fast.png \
+		../Ltem_Sorting/Rese/bishui.png \
+		../Ltem_Sorting/Rese/exmode.png \
+		../Ltem_Sorting/Rese/red.png \
 		../Ltem_Sorting/Rese/qrbtn.png \
+		../Ltem_Sorting/Rese/blue.png \
+		../Ltem_Sorting/Rese/yunting.png \
+		../Ltem_Sorting/Rese/exbtn.png \
+		../Ltem_Sorting/Rese/fast.png \
+		../Ltem_Sorting/Rese/clrbtn.png \
+		../Ltem_Sorting/Rese/HSV.png \
+		../Ltem_Sorting/Rese/backgud.png \
+		../Ltem_Sorting/Rese/openserial.png \
+		../Ltem_Sorting/Rese/exmenu.png \
+		../Ltem_Sorting/Rese/Serial.png \
+		../Ltem_Sorting/Rese/senddata.png \
+		../Ltem_Sorting/Rese/slow.png \
+		../Ltem_Sorting/Rese/send.png \
+		../Ltem_Sorting/Rese/green.png \
+		../Ltem_Sorting/Rese/baiyun.png \
+		../Ltem_Sorting/Rese/back.png \
 		../Ltem_Sorting/Rese/back.png
 	/usr/lib/qt5/bin/rcc -name Resource ../Ltem_Sorting/Resource.qrc -o qrc_Resource.cpp
 
@@ -455,13 +486,18 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	clang++ -pipe -g -std=gnu++1z -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_camera.cpp moc_mainwindow.cpp moc_myserial.cpp moc_mytimer.cpp moc_qrcode.cpp moc_scancolor.cpp
+compiler_moc_header_make_all: moc_camera.cpp moc_hsvajustdialog.cpp moc_mainwindow.cpp moc_myserial.cpp moc_mytimer.cpp moc_mywork.cpp moc_qrcode.cpp moc_scancolor.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_camera.cpp moc_mainwindow.cpp moc_myserial.cpp moc_mytimer.cpp moc_qrcode.cpp moc_scancolor.cpp
+	-$(DEL_FILE) moc_camera.cpp moc_hsvajustdialog.cpp moc_mainwindow.cpp moc_myserial.cpp moc_mytimer.cpp moc_mywork.cpp moc_qrcode.cpp moc_scancolor.cpp
 moc_camera.cpp: ../Ltem_Sorting/camera.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/camera.h -o moc_camera.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/include/zbar -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/camera.h -o moc_camera.cpp
+
+moc_hsvajustdialog.cpp: ../Ltem_Sorting/hsvajustdialog.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/include/zbar -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/hsvajustdialog.h -o moc_hsvajustdialog.cpp
 
 moc_mainwindow.cpp: ../Ltem_Sorting/mainwindow.h \
 		../Ltem_Sorting/mode.h \
@@ -470,14 +506,16 @@ moc_mainwindow.cpp: ../Ltem_Sorting/mainwindow.h \
 		ui_qrcode.h \
 		../Ltem_Sorting/mytimer.h \
 		../Ltem_Sorting/btneffect.h \
+		../Ltem_Sorting/mainwindow.h \
 		../Ltem_Sorting/scancolor.h \
 		ui_scancolor.h \
+		../Ltem_Sorting/hsvajustdialog.h \
 		../Ltem_Sorting/myserial.h \
-		../Ltem_Sorting/mainwindow.h \
 		ui_myserial.h \
+		../Ltem_Sorting/mywork.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/mainwindow.h -o moc_mainwindow.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/include/zbar -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/mainwindow.h -o moc_mainwindow.cpp
 
 moc_myserial.cpp: ../Ltem_Sorting/myserial.h \
 		../Ltem_Sorting/mainwindow.h \
@@ -487,18 +525,38 @@ moc_myserial.cpp: ../Ltem_Sorting/myserial.h \
 		ui_qrcode.h \
 		../Ltem_Sorting/mytimer.h \
 		../Ltem_Sorting/btneffect.h \
+		../Ltem_Sorting/mywork.h \
 		../Ltem_Sorting/scancolor.h \
 		ui_scancolor.h \
+		../Ltem_Sorting/hsvajustdialog.h \
 		../Ltem_Sorting/myserial.h \
 		ui_myserial.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/myserial.h -o moc_myserial.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/include/zbar -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/myserial.h -o moc_myserial.cpp
 
 moc_mytimer.cpp: ../Ltem_Sorting/mytimer.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/mytimer.h -o moc_mytimer.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/include/zbar -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/mytimer.h -o moc_mytimer.cpp
+
+moc_mywork.cpp: ../Ltem_Sorting/mywork.h \
+		../Ltem_Sorting/qrcode.h \
+		../Ltem_Sorting/mode.h \
+		../Ltem_Sorting/camera.h \
+		ui_qrcode.h \
+		../Ltem_Sorting/mytimer.h \
+		../Ltem_Sorting/btneffect.h \
+		../Ltem_Sorting/mainwindow.h \
+		../Ltem_Sorting/scancolor.h \
+		ui_scancolor.h \
+		../Ltem_Sorting/hsvajustdialog.h \
+		../Ltem_Sorting/myserial.h \
+		ui_myserial.h \
+		../Ltem_Sorting/mywork.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/include/zbar -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/mywork.h -o moc_mywork.cpp
 
 moc_qrcode.cpp: ../Ltem_Sorting/qrcode.h \
 		../Ltem_Sorting/mode.h \
@@ -506,25 +564,47 @@ moc_qrcode.cpp: ../Ltem_Sorting/qrcode.h \
 		ui_qrcode.h \
 		../Ltem_Sorting/mytimer.h \
 		../Ltem_Sorting/btneffect.h \
+		../Ltem_Sorting/mainwindow.h \
+		../Ltem_Sorting/qrcode.h \
+		../Ltem_Sorting/mywork.h \
+		../Ltem_Sorting/scancolor.h \
+		ui_scancolor.h \
+		../Ltem_Sorting/hsvajustdialog.h \
+		../Ltem_Sorting/myserial.h \
+		ui_myserial.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/qrcode.h -o moc_qrcode.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/include/zbar -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/qrcode.h -o moc_qrcode.cpp
 
 moc_scancolor.cpp: ../Ltem_Sorting/scancolor.h \
 		../Ltem_Sorting/mode.h \
 		../Ltem_Sorting/camera.h \
 		ui_scancolor.h \
+		../Ltem_Sorting/mainwindow.h \
+		../Ltem_Sorting/qrcode.h \
+		ui_qrcode.h \
+		../Ltem_Sorting/mytimer.h \
+		../Ltem_Sorting/btneffect.h \
+		../Ltem_Sorting/mywork.h \
+		../Ltem_Sorting/scancolor.h \
+		../Ltem_Sorting/hsvajustdialog.h \
+		../Ltem_Sorting/myserial.h \
+		ui_myserial.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/scancolor.h -o moc_scancolor.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/yihang/Qt_project/build-Ltem_Sorting-unknown-Debug/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-clang -I/home/yihang/Qt_project/Ltem_Sorting -I/usr/include/zbar -I/usr/local/include/opencv4 -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtWidgets -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtSerialPort -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/12 -I/usr/include/aarch64-linux-gnu/c++/12 -I/usr/include/c++/12/backward -I/usr/lib/llvm-14/lib/clang/14.0.6/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include ../Ltem_Sorting/scancolor.h -o moc_scancolor.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_myserial.h ui_qrcode.h ui_scancolor.h ui_mainwindow.h
+compiler_uic_make_all: ui_hsvajustdialog.h ui_myserial.h ui_qrcode.h ui_scancolor.h ui_mainwindow.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_myserial.h ui_qrcode.h ui_scancolor.h ui_mainwindow.h
+	-$(DEL_FILE) ui_hsvajustdialog.h ui_myserial.h ui_qrcode.h ui_scancolor.h ui_mainwindow.h
+ui_hsvajustdialog.h: ../Ltem_Sorting/hsvajustdialog.ui \
+		/usr/lib/qt5/bin/uic
+	/usr/lib/qt5/bin/uic ../Ltem_Sorting/hsvajustdialog.ui -o ui_hsvajustdialog.h
+
 ui_myserial.h: ../Ltem_Sorting/myserial.ui \
 		/usr/lib/qt5/bin/uic
 	/usr/lib/qt5/bin/uic ../Ltem_Sorting/myserial.ui -o ui_myserial.h
@@ -557,6 +637,9 @@ btneffect.o: ../Ltem_Sorting/btneffect.cpp ../Ltem_Sorting/btneffect.h
 camera.o: ../Ltem_Sorting/camera.cpp ../Ltem_Sorting/camera.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o camera.o ../Ltem_Sorting/camera.cpp
 
+hsvajustdialog.o: ../Ltem_Sorting/hsvajustdialog.cpp ../Ltem_Sorting/hsvajustdialog.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o hsvajustdialog.o ../Ltem_Sorting/hsvajustdialog.cpp
+
 main.o: ../Ltem_Sorting/main.cpp ../Ltem_Sorting/mainwindow.h \
 		../Ltem_Sorting/mode.h \
 		../Ltem_Sorting/qrcode.h \
@@ -564,8 +647,10 @@ main.o: ../Ltem_Sorting/main.cpp ../Ltem_Sorting/mainwindow.h \
 		ui_qrcode.h \
 		../Ltem_Sorting/mytimer.h \
 		../Ltem_Sorting/btneffect.h \
+		../Ltem_Sorting/mywork.h \
 		../Ltem_Sorting/scancolor.h \
 		ui_scancolor.h \
+		../Ltem_Sorting/hsvajustdialog.h \
 		../Ltem_Sorting/myserial.h \
 		ui_myserial.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../Ltem_Sorting/main.cpp
@@ -577,8 +662,10 @@ mainwindow.o: ../Ltem_Sorting/mainwindow.cpp ../Ltem_Sorting/mainwindow.h \
 		ui_qrcode.h \
 		../Ltem_Sorting/mytimer.h \
 		../Ltem_Sorting/btneffect.h \
+		../Ltem_Sorting/mywork.h \
 		../Ltem_Sorting/scancolor.h \
 		ui_scancolor.h \
+		../Ltem_Sorting/hsvajustdialog.h \
 		../Ltem_Sorting/myserial.h \
 		ui_myserial.h \
 		ui_mainwindow.h
@@ -598,26 +685,59 @@ myserial.o: ../Ltem_Sorting/myserial.cpp ../Ltem_Sorting/myserial.h \
 		ui_qrcode.h \
 		../Ltem_Sorting/mytimer.h \
 		../Ltem_Sorting/btneffect.h \
+		../Ltem_Sorting/mywork.h \
 		../Ltem_Sorting/scancolor.h \
 		ui_scancolor.h \
+		../Ltem_Sorting/hsvajustdialog.h \
 		ui_myserial.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o myserial.o ../Ltem_Sorting/myserial.cpp
 
 mytimer.o: ../Ltem_Sorting/mytimer.cpp ../Ltem_Sorting/mytimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mytimer.o ../Ltem_Sorting/mytimer.cpp
 
+mywork.o: ../Ltem_Sorting/mywork.cpp ../Ltem_Sorting/mywork.h \
+		../Ltem_Sorting/qrcode.h \
+		../Ltem_Sorting/mode.h \
+		../Ltem_Sorting/camera.h \
+		ui_qrcode.h \
+		../Ltem_Sorting/mytimer.h \
+		../Ltem_Sorting/btneffect.h \
+		../Ltem_Sorting/mainwindow.h \
+		../Ltem_Sorting/scancolor.h \
+		ui_scancolor.h \
+		../Ltem_Sorting/hsvajustdialog.h \
+		../Ltem_Sorting/myserial.h \
+		ui_myserial.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mywork.o ../Ltem_Sorting/mywork.cpp
+
 qrcode.o: ../Ltem_Sorting/qrcode.cpp ../Ltem_Sorting/qrcode.h \
 		../Ltem_Sorting/mode.h \
 		../Ltem_Sorting/camera.h \
 		ui_qrcode.h \
 		../Ltem_Sorting/mytimer.h \
-		../Ltem_Sorting/btneffect.h
+		../Ltem_Sorting/btneffect.h \
+		../Ltem_Sorting/mainwindow.h \
+		../Ltem_Sorting/scancolor.h \
+		ui_scancolor.h \
+		../Ltem_Sorting/hsvajustdialog.h \
+		../Ltem_Sorting/myserial.h \
+		ui_myserial.h \
+		../Ltem_Sorting/mywork.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrcode.o ../Ltem_Sorting/qrcode.cpp
 
 scancolor.o: ../Ltem_Sorting/scancolor.cpp ../Ltem_Sorting/scancolor.h \
 		../Ltem_Sorting/mode.h \
 		../Ltem_Sorting/camera.h \
-		ui_scancolor.h
+		ui_scancolor.h \
+		../Ltem_Sorting/mainwindow.h \
+		../Ltem_Sorting/qrcode.h \
+		ui_qrcode.h \
+		../Ltem_Sorting/mytimer.h \
+		../Ltem_Sorting/btneffect.h \
+		../Ltem_Sorting/mywork.h \
+		../Ltem_Sorting/myserial.h \
+		ui_myserial.h \
+		../Ltem_Sorting/hsvajustdialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o scancolor.o ../Ltem_Sorting/scancolor.cpp
 
 qrc_Resource.o: qrc_Resource.cpp 
@@ -629,6 +749,9 @@ qrc_qmake_qmake_qm_files.o: qrc_qmake_qmake_qm_files.cpp
 moc_camera.o: moc_camera.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_camera.o moc_camera.cpp
 
+moc_hsvajustdialog.o: moc_hsvajustdialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_hsvajustdialog.o moc_hsvajustdialog.cpp
+
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
 
@@ -637,6 +760,9 @@ moc_myserial.o: moc_myserial.cpp
 
 moc_mytimer.o: moc_mytimer.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mytimer.o moc_mytimer.cpp
+
+moc_mywork.o: moc_mywork.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mywork.o moc_mywork.cpp
 
 moc_qrcode.o: moc_qrcode.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_qrcode.o moc_qrcode.cpp
